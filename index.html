@@ -148,6 +148,17 @@ body.editing .ring .orb::after{content:"";position:absolute;inset:6%;border-radi
 .pips{grid-column:1/3;display:flex;flex-wrap:wrap;gap:5px}
 .pip{width:18px;height:18px;border-radius:50%;border:1.5px solid #c4ad70;background:#143a2b;cursor:pointer}
 .pip.on{background:radial-gradient(circle at 40% 35%,#ffb0a0,#d03a2a 55%,#7a140c);border-color:#e0b070}
+.panel.cbt{padding:0 15%;justify-content:center;cursor:pointer}
+.cgrid{display:grid;grid-template-columns:auto auto auto auto;align-items:center;column-gap:8px;row-gap:5px;width:100%;justify-content:space-between}
+.cgrid .cl{font-size:clamp(12px,3.6vw,15px);color:var(--gold);text-shadow:0 1px 2px #000;white-space:nowrap}
+.cgrid .cl2{padding-left:6px}
+.cgrid .cv{display:flex;align-items:center;gap:4px}
+.cgrid .cv i{font-style:normal;color:var(--gold2);font-size:14px}
+.cgrid .sval{width:clamp(28px,8.4vw,34px);height:clamp(25px,7.4vw,30px);font-size:clamp(12px,3.6vw,15px)}
+.cbrow{display:flex;justify-content:space-between;gap:10px;padding:8px 4px;border-bottom:1px solid rgba(220,199,142,.18);font-size:14px}
+.cbrow:last-of-type{border-bottom:0}
+.cbrow b{font-size:18px;color:#fff}
+.cbrow small{display:block;font-size:11.5px;color:#cdbf98;margin-top:2px}
 .panel.hcs{padding-top:3%;flex-direction:row;justify-content:space-around;align-items:center}
 .stat{display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer}
 .stat .sl{font-size:clamp(14px,4.3vw,19px);color:var(--gold);text-shadow:0 1px 2px #000}
@@ -337,6 +348,15 @@ textarea.notes{width:100%;min-height:55vh;resize:vertical;background:rgba(6,30,2
     </div>
 
     <div class="panel hcs" id="hcsPanel"></div>
+
+    <div class="panel cbt" id="combatPanel">
+      <div class="cgrid">
+        <div class="cl">Inicjatywa</div><div class="cv"><div class="sval"><span id="cbInit"></span></div></div>
+        <div class="cl cl2">Tode</div><div class="cv"><div class="sval"><span id="cbTode"></span></div></div>
+        <div class="cl">Pancerz</div><div class="cv"><div class="sval"><span id="cbArm"></span></div><i>/</i><div class="sval"><span id="cbArmFull"></span></div></div>
+        <div class="cl cl2">Aikijutsu</div><div class="cv"><div class="sval"><span id="cbAiki"></span></div></div>
+      </div>
+    </div>
   </section>
 
   <!-- ===== Pozostałe strony ===== -->
@@ -1203,7 +1223,34 @@ textarea.notes{width:100%;min-height:55vh;resize:vertical;background:rgba(6,30,2
   restoreFileHandle();
   try { navigator.storage && navigator.storage.persist && navigator.storage.persist(); } catch (e) {}
 
-  function renderAll(){ renderHeader(); renderRings(); renderHCS(); renderHealth(); renderSkills(); renderTattoos(); renderMartial(); renderAdv(); $("#pdBadge").textContent = S.pd; }
+  // ---- Walka: inicjatywa i pancerz ----
+  function combatStats(){
+    const rank = insightRank(insight()), refl = S.traits.refleks;
+    const fire = ringValue(RINGS.find(r => r.id === "ogien")), air = ringValue(RINGS.find(r => r.id === "powietrze"));
+    const def = S.skills["bugei:obrona"] || 0;
+    const arm = rank * 2 + refl * 5 + def;
+    return { rank, refl, fire, air, def, init: refl, tode: refl + rank + fire, arm, armFull: arm + rank * 5, aiki: air };
+  }
+  function renderCombat(){
+    const c = combatStats();
+    $("#cbInit").textContent = c.init; $("#cbTode").textContent = c.tode;
+    $("#cbArm").textContent = c.arm; $("#cbArmFull").textContent = c.armFull; $("#cbAiki").textContent = "+" + c.aiki;
+  }
+  $("#combatPanel").addEventListener("click", () => {
+    const c = combatStats();
+    openModal(() => {
+      modal.innerHTML = `
+        <div class="tag">WALKA</div>
+        <div class="cbrow"><div>Inicjatywa<small>Refleks ${c.refl}</small></div><b>${c.init}</b></div>
+        <div class="cbrow"><div>Tode<small>Refleks ${c.refl} + Ranga ${c.rank} + Ogień ${c.fire}</small></div><b>${c.tode}</b></div>
+        <div class="cbrow"><div>Pancerz<small>Ranga ${c.rank} × 2 + Refleks ${c.refl} × 5 + Obrona ${c.def}</small></div><b>${c.arm}</b></div>
+        <div class="cbrow"><div>Pancerz (drugi)<small>${c.arm} + Ranga ${c.rank} × 5</small></div><b>${c.armFull}</b></div>
+        <div class="cbrow"><div>Aikijutsu<small>Powietrze ${c.air}</small></div><b>+${c.aiki}</b></div>
+        <button class="close" data-act="close">ZAMKNIJ</button>`;
+    });
+  });
+
+  function renderAll(){ renderHeader(); renderRings(); renderHCS(); renderHealth(); renderSkills(); renderTattoos(); renderMartial(); renderAdv(); renderCombat(); $("#pdBadge").textContent = S.pd; }
   renderAll();
   go(PAGES.some(p => p.id === S.page) ? S.page : "kregi");
 
