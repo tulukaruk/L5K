@@ -180,7 +180,7 @@ body.editing .ring .orb::after{content:"";position:absolute;inset:6%;border-radi
 .sval{flex:none;width:32px;height:30px;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:600;color:#f6efd8;
   clip-path:polygon(25% 0,75% 0,100% 50%,75% 100%,25% 100%,0 50%);background:linear-gradient(180deg,#e8d49a,#9c7a35);position:relative}
 .sval::before{content:"";position:absolute;inset:2px;clip-path:inherit;background:radial-gradient(circle at 40% 30%,#3c7a60,#173f2f 70%)}
-.sval span{position:relative}
+.sval span{position:relative;line-height:1}
 .srow.zero .sval span{opacity:.5}
 .sbtn{flex:none;width:28px;height:28px;border-radius:50%;border:1.5px solid #cdb67a;background:radial-gradient(circle at 40% 35%,#3a7d61,#163f2f);
   color:var(--gold);font:600 17px/1 "Montserrat",sans-serif;display:flex;align-items:center;justify-content:center;cursor:pointer;padding:0}
@@ -278,6 +278,9 @@ textarea.notes{width:100%;min-height:55vh;resize:vertical;background:rgba(6,30,2
 .field .hint{font-size:11.5px;color:#cdbf98;margin-top:4px}
 .field .hint b{color:var(--gold)}
 .fbad{border-color:#e0503c!important}
+.tt-rank{padding:6px 4px 6px 12px;border-radius:12px;border:1px solid #cdb67a;background:rgba(6,30,20,.65)}
+.tt-rank .sname{font-size:16px;color:#fff}
+.field .sval span{display:inline;margin:0;font-size:15px;color:#f6efd8}
 
 /* ---------- Sztuki walki ---------- */
 .ma{padding:4px 0 12px;border-bottom:1px solid rgba(220,199,142,.22)}
@@ -818,20 +821,26 @@ textarea.notes{width:100%;min-height:55vh;resize:vertical;background:rgba(6,30,2
         <div class="tag">${isNew ? "NOWY TATUAŻ" : "EDYCJA TATUAŻU"}</div>
         <div class="mscroll">
           <label class="field"><span>Nazwa</span><input id="ttName" maxlength="60"></label>
-          <label class="field"><span>Ranga, na której postać dostała tatuaż</span><input id="ttRank" type="number" inputmode="numeric" min="1" max="10" step="1"></label>
+          <div class="field"><span>Ranga, na której postać dostała tatuaż</span>
+            <div class="srow tt-rank"><div class="sname" id="ttRankName"></div>
+              <button class="sbtn" id="ttDec" type="button">−</button>
+              <div class="sval"><span id="ttRankVal"></span></div>
+              <button class="sbtn" id="ttInc" type="button">+</button></div></div>
           <label class="field"><span>Opis</span><textarea id="ttDesc"></textarea>
             <div class="hint">Wpisz <b>XX</b> tam, gdzie ma się pojawić obecna ranga postaci.</div></label>
         </div>
         <div class="brow" style="margin-top:14px"><button class="close" id="ttSave">ZAPISZ</button><button class="close" data-act="close">ANULUJ</button></div>`;
       $("#ttName").value = t ? t.name : "";
-      $("#ttRank").value = t ? t.rank : insightRank(insight());
+      let rank = clamp(t ? t.rank : insightRank(insight()), 1, 10);
+      const showRank = () => { $("#ttRankVal").textContent = rank; $("#ttRankName").textContent = "Ranga " + roman(rank); $("#ttDec").disabled = rank <= 1; $("#ttInc").disabled = rank >= 10; };
+      $("#ttDec").onclick = () => { rank = Math.max(1, rank - 1); showRank(); };
+      $("#ttInc").onclick = () => { rank = Math.min(10, rank + 1); showRank(); };
+      showRank();
       $("#ttDesc").value = t ? t.desc : "";
       $("#ttSave").onclick = () => {
-        const name = $("#ttName").value.trim(), rank = Math.floor(Number($("#ttRank").value));
-        const okName = !!name, okRank = rank >= 1 && rank <= 10;
-        $("#ttName").classList.toggle("fbad", !okName); $("#ttRank").classList.toggle("fbad", !okRank);
-        if (!okName) { toast("Podaj nazwę tatuażu"); return; }
-        if (!okRank) { toast("Ranga od 1 do 10"); return; }
+        const name = $("#ttName").value.trim();
+        $("#ttName").classList.toggle("fbad", !name);
+        if (!name) { toast("Podaj nazwę tatuażu"); return; }
         const desc = $("#ttDesc").value;
         if (isNew) { const nt = { id: "t" + Date.now().toString(36) + Math.random().toString(36).slice(2, 5), name, rank, desc }; S.tattoos.push(nt); tatOpen = nt.id; toast("Dodano: " + name); }
         else { Object.assign(t, { name, rank, desc }); toast("Zapisano zmiany"); }
