@@ -296,7 +296,7 @@ textarea.notes{width:100%;min-height:55vh;resize:vertical;background:rgba(6,30,2
 .ma-next{font-size:12px;color:#a99c78;font-style:italic;padding:4px 4px 0;line-height:1.45}
 .advbox + .advbox{margin-top:26px}
 .adv-title{font-size:19px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--gold);text-shadow:0 1px 2px #000;padding:0 4px 6px;border-bottom:1px solid rgba(220,199,142,.22)}
-.adv-cost{margin:0 6px 6px 8px;font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--gold2)}
+.adv-cost{margin:2px 6px 6px 8px;font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--gold2)}
 .adv-cost b{color:#f5c94e;font-size:14px}
 .ma-none{font-size:13px;color:#a99c78;font-style:italic;padding:2px 4px}
 </style>
@@ -782,6 +782,7 @@ textarea.notes{width:100%;min-height:55vh;resize:vertical;background:rgba(6,30,2
   let tatOpen = null;
   const tatList = () => S.tattoos.slice().sort((a, b) => a.rank - b.rank);
   const tatDesc = d => esc(d).replace(/XX/g, `<b class="rk">${insightRank(insight())}</b>`);
+  const tatEffect = t => String(t.effect != null ? t.effect : (t.desc || ""));
   function renderTattoos(){
     const list = tatList();
     if (!list.length) {
@@ -798,7 +799,12 @@ textarea.notes{width:100%;min-height:55vh;resize:vertical;background:rgba(6,30,2
                        <button class="tat-ed del" data-tt="del" data-id="${t.id}" aria-label="Usuń">✕</button>`
                     : `<div class="tat-ch">▼</div>`}
         </div>
-        <div class="tat-b"><div><div class="tat-d ${t.desc.trim() ? "" : "none"}">${t.desc.trim() ? tatDesc(t.desc) : "Brak opisu."}</div></div></div>
+        <div class="tat-b"><div>
+          <div class="adv-cost">Efekt</div>
+          <div class="tat-d ${tatEffect(t).trim() ? "" : "none"}">${tatEffect(t).trim() ? tatDesc(tatEffect(t)) : "Brak opisu efektu."}</div>
+          <div class="adv-cost">Koszt</div>
+          <div class="tat-d ${String(t.cost || "").trim() ? "" : "none"}">${String(t.cost || "").trim() ? tatDesc(t.cost) : "Brak kosztu."}</div>
+        </div></div>
       </div>`).join("") + (editing ? `<button class="close tat-add" data-tt="add">+ DODAJ TATUAŻ</button>` : "");
   }
   tatBox.addEventListener("click", e => {
@@ -826,8 +832,9 @@ textarea.notes{width:100%;min-height:55vh;resize:vertical;background:rgba(6,30,2
               <button class="sbtn" id="ttDec" type="button">−</button>
               <div class="sval"><span id="ttRankVal"></span></div>
               <button class="sbtn" id="ttInc" type="button">+</button></div></div>
-          <label class="field"><span>Opis</span><textarea id="ttDesc"></textarea>
-            <div class="hint">Wpisz <b>XX</b> tam, gdzie ma się pojawić obecna ranga postaci.</div></label>
+          <label class="field"><span>Efekt</span><textarea id="ttEffect"></textarea></label>
+          <label class="field"><span>Koszt</span><textarea id="ttCost" style="min-height:70px"></textarea>
+            <div class="hint">W efekcie i koszcie wpisz <b>XX</b> tam, gdzie ma się pojawić obecna ranga postaci.</div></label>
         </div>
         <div class="brow" style="margin-top:14px"><button class="close" id="ttSave">ZAPISZ</button><button class="close" data-act="close">ANULUJ</button></div>`;
       $("#ttName").value = t ? t.name : "";
@@ -836,14 +843,15 @@ textarea.notes{width:100%;min-height:55vh;resize:vertical;background:rgba(6,30,2
       $("#ttDec").onclick = () => { rank = Math.max(1, rank - 1); showRank(); };
       $("#ttInc").onclick = () => { rank = Math.min(10, rank + 1); showRank(); };
       showRank();
-      $("#ttDesc").value = t ? t.desc : "";
+      $("#ttEffect").value = t ? tatEffect(t) : "";
+      $("#ttCost").value = t ? (t.cost || "") : "";
       $("#ttSave").onclick = () => {
         const name = $("#ttName").value.trim();
         $("#ttName").classList.toggle("fbad", !name);
         if (!name) { toast("Podaj nazwę tatuażu"); return; }
-        const desc = $("#ttDesc").value;
-        if (isNew) { const nt = { id: "t" + Date.now().toString(36) + Math.random().toString(36).slice(2, 5), name, rank, desc }; S.tattoos.push(nt); tatOpen = nt.id; toast("Dodano: " + name); }
-        else { Object.assign(t, { name, rank, desc }); toast("Zapisano zmiany"); }
+        const effect = $("#ttEffect").value, cost = $("#ttCost").value;
+        if (isNew) { const nt = { id: "t" + Date.now().toString(36) + Math.random().toString(36).slice(2, 5), name, rank, effect, cost }; S.tattoos.push(nt); tatOpen = nt.id; toast("Dodano: " + name); }
+        else { Object.assign(t, { name, rank, effect, cost }); delete t.desc; toast("Zapisano zmiany"); }
         save(); closeModal(); renderAll();
       };
       if (isNew) setTimeout(() => $("#ttName") && $("#ttName").focus(), 50);
