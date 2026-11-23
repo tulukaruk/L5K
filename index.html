@@ -1,0 +1,1200 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover, user-scalable=no">
+<meta name="theme-color" content="#0d2f22">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Karta L5K">
+<title>Karta Postaci L5K</title>
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="img/app-192.png">
+<link rel="apple-touch-icon" href="img/app-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+@font-face{font-family:"Brushtip";src:url(fonts/brushtip.ttf) format("truetype");font-display:swap}
+:root{
+  --gold:#e8d49a; --gold2:#c9a85a; --gold-dark:#8a6a2c;
+  --jade:#2f7a5a; --jade-dark:#14412f; --mint:#9ff5d6;
+  --text:#f1e6c4;
+  --nav-h:78px;
+}
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;margin:0;padding:0}
+html,body{height:100%;background:#0b2a1e;color:var(--text);font-family:"Montserrat",sans-serif;overscroll-behavior:none}
+body{
+  background:#0b2a1e url(img/background.webp) center top/cover fixed no-repeat;
+  -webkit-user-select:none;user-select:none;
+}
+.app{max-width:480px;margin:0 auto;min-height:100%;position:relative;
+  padding:calc(env(safe-area-inset-top) + 14px) 14px calc(var(--nav-h) + env(safe-area-inset-bottom) + 18px)}
+.page{display:none;animation:fade .25s ease}
+.page.active{display:block}
+@keyframes fade{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:none}}
+
+/* ---------- Header ---------- */
+.header{text-align:center;padding:6px 0 2px;margin-top:18px;cursor:pointer}
+.name{font-family:"Brushtip","Montserrat",sans-serif;font-weight:400;font-size:clamp(40px,12vw,56px);line-height:1.1;padding:0 6px;
+  background:linear-gradient(180deg,#fff6d8 0%,#ecd18c 45%,#b98e3e 100%);-webkit-background-clip:text;background-clip:text;color:transparent;
+  filter:drop-shadow(0 2px 3px rgba(0,0,0,.6))}
+.rankline{margin-top:2px;font-size:clamp(12px,3.6vw,14px);font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:#e9d9a6;text-shadow:0 1px 2px #000}
+.rankline b{color:#fff;font-weight:700}
+.divider{height:1px;margin:8px auto 0;width:78%;background:linear-gradient(90deg,transparent,var(--gold2),transparent)}
+
+/* ---------- Górne przyciski ---------- */
+.topbar{display:flex;justify-content:flex-end;align-items:center;gap:6px;margin:-4px -6px 0 0}
+.gearbtn{position:relative;margin-right:auto;width:38px;height:38px;border-radius:50%;border:2px solid #cdb67a;cursor:pointer;padding:0;
+  display:flex;align-items:center;justify-content:center;color:#e8d49a;background:radial-gradient(circle at 40% 35%,#2f7357,#123a2a);
+  box-shadow:inset 0 1px 0 rgba(255,255,255,.2),0 2px 4px rgba(0,0,0,.5)}
+.gearbtn:active{transform:scale(.93)}
+.gdot{display:none;position:absolute;top:-2px;right:-2px;width:11px;height:11px;border-radius:50%;background:#ffb04a;border:1.5px solid #3a2a0a;box-shadow:0 0 6px rgba(255,176,74,.9)}
+.gdot.on{display:block}
+.mscroll{max-height:72vh;overflow:auto;margin:0 -6px;padding:0 6px;-webkit-overflow-scrolling:touch}
+.sec{margin-top:16px;padding-top:12px;border-top:1px solid rgba(220,199,142,.25)}
+.sec:first-child{margin-top:4px;padding-top:0;border-top:0}
+.sec h3{font-size:14px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--gold);margin-bottom:6px}
+.sec p{font-size:12.5px;line-height:1.45;color:#d8caa0;margin-bottom:8px}
+.thr{display:grid;grid-template-columns:repeat(3,1fr);gap:6px 10px}
+.thr label{display:flex;flex-direction:column;font-size:11px;color:#cdbf98;gap:3px}
+.thr input{width:100%;padding:7px 6px;border-radius:10px;border:1px solid #cdb67a;background:rgba(6,30,20,.65);color:#fff;font:15px "Montserrat",sans-serif;text-align:center;outline:none;-webkit-user-select:text;user-select:text}
+.thr input.bad{border-color:#e0503c}
+.brow{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin-top:8px}
+.brow .close{margin:0;padding:9px 14px;font-size:12px}
+.fstat{margin-top:8px;font-size:12px;text-align:center;color:#cdbf98;line-height:1.4}
+.fstat b{color:#9ff5d6;font-weight:600}
+.fstat.warn b{color:#ffb04a}
+.bk-copy{width:100%;min-height:110px;margin-top:8px;background:rgba(6,30,20,.65);border:1px solid #cdb67a;border-radius:12px;color:#fff;font:11px/1.4 monospace;padding:8px;-webkit-user-select:text;user-select:text}
+.imgbtn{position:relative;background:none;border:0;padding:0;cursor:pointer;line-height:0;transition:transform .15s,filter .2s}
+.imgbtn img{height:clamp(36px,10.5vw,44px);width:auto;filter:drop-shadow(0 2px 3px rgba(0,0,0,.55))}
+.imgbtn:active{transform:scale(.95)}
+.imgbtn.on img{filter:drop-shadow(0 0 6px rgba(255,226,140,.95)) drop-shadow(0 0 12px rgba(255,214,110,.6)) brightness(1.12)}
+.badge{position:absolute;top:-4px;right:-2px;min-width:22px;height:20px;padding:0 6px;border-radius:999px;display:flex;align-items:center;justify-content:center;
+  font:600 11px "Montserrat",sans-serif;line-height:1;color:#1b3b2c;background:linear-gradient(180deg,#fff0bf,#d9b765);border:1px solid #7a5d24;box-shadow:0 1px 3px rgba(0,0,0,.5)}
+.editbar{display:none;margin:6px auto 0;width:max-content;max-width:100%;padding:4px 14px;border-radius:999px;font-size:12px;color:#1b3b2c;font-weight:600;
+  background:linear-gradient(180deg,#fff0bf,#d9b765);box-shadow:0 0 10px rgba(255,220,130,.5)}
+body.editing .editbar{display:block}
+body.editing .name{text-decoration:underline dashed rgba(232,212,154,.55);text-underline-offset:8px;text-decoration-thickness:2px}
+body:not(.editing) .header{cursor:default}
+body.editing .ring .orb::after{content:"";position:absolute;inset:6%;border-radius:50%;border:2px dashed rgba(255,236,170,.55);animation:spin 14s linear infinite;pointer-events:none}
+@keyframes spin{to{transform:rotate(360deg)}}
+.btn:disabled{opacity:.35;pointer-events:none}
+.toast{position:fixed;left:50%;bottom:calc(var(--nav-h) + env(safe-area-inset-bottom) + 14px);transform:translateX(-50%) translateY(10px);opacity:0;z-index:60;
+  padding:9px 16px;border-radius:999px;background:rgba(6,30,20,.92);border:1px solid #cdb67a;color:#f1e6c4;font-size:13px;white-space:nowrap;transition:all .25s;pointer-events:none}
+.toast.show{opacity:1;transform:translateX(-50%)}
+.pdbig{text-align:center;font-size:56px;line-height:1;color:#fff;text-shadow:0 0 14px rgba(255,226,140,.6),0 2px 3px #000;margin:4px 0 2px}
+.pdsub{text-align:center;font-size:12px;color:#d8caa0;margin-bottom:14px}
+.pdrow{display:grid;grid-template-columns:repeat(4,1fr);gap:8px}
+.pdrow .btn{min-width:0;font-size:16px}
+.field input[type=number]{text-align:center}
+
+/* ---------- Kręgi ---------- */
+.circle{position:relative;width:100%;aspect-ratio:1/1.08;margin-top:4px}
+.circle .frame{position:absolute;left:50%;top:47%;width:90%;transform:translate(-50%,-50%);
+  filter:brightness(1.5) saturate(1.1);opacity:.95;pointer-events:none}
+.ring{position:absolute;width:27%;transform:translate(-50%,-50%);cursor:pointer;display:flex;flex-direction:column;align-items:center}
+.ring .orb{position:relative;width:100%;aspect-ratio:1}
+.ring .orb::before{content:"";position:absolute;inset:22%;border-radius:50%;background:radial-gradient(circle,rgba(5,25,17,.85) 0%,rgba(5,25,17,.55) 70%,transparent 100%)}
+.ring .orb img.glow{position:absolute;inset:-14%;width:128%;height:128%;pointer-events:none;transition:transform .3s}
+.ring:active .orb img.glow{transform:scale(.94)}
+.ring .el{position:absolute;inset:12.5%;z-index:1;background:var(--c);opacity:.5;
+  -webkit-mask:var(--m) center/contain no-repeat;mask:var(--m) center/contain no-repeat}
+.ring .val{position:absolute;inset:0;z-index:2;display:flex;flex-direction:column;align-items:center;justify-content:center}
+.ring .num{font-size:clamp(28px,8.5vw,38px);line-height:1;color:#fff;text-shadow:0 0 10px var(--c),0 2px 3px #000}
+.ring .lbl{text-transform:uppercase;font-weight:600;font-family:"Montserrat",sans-serif;font-size:clamp(7.5px,2.2vw,9.5px);letter-spacing:.02em;color:#fff;opacity:.92;margin-top:3px;text-shadow:0 1px 2px #000}
+.traits{display:flex;flex-direction:column;gap:3px;margin-top:-2px;width:118%}
+.trait{display:flex;justify-content:space-between;align-items:center;gap:4px;padding:2px 8px;border-radius:999px;
+  font-size:clamp(9.5px,2.7vw,11px);color:#efe2bb;background:rgba(6,30,20,.72);border:1px solid rgba(232,212,154,.45);white-space:nowrap}
+.trait b{font-weight:400;color:#fff;font-size:1.15em}
+.void-center{position:absolute;left:50%;top:47%;transform:translate(-50%,-50%);width:30%;aspect-ratio:1;border-radius:50%;
+  display:flex;flex-direction:column;align-items:center;justify-content:center;cursor:pointer;text-align:center}
+.void-center .num{font-size:clamp(30px,9vw,40px);line-height:1;color:#f1e9ff;text-shadow:0 0 12px rgba(150,100,255,.9),0 2px 3px #000}
+.void-center .num small{font-size:.5em;opacity:.7}
+.void-center .lbl{text-transform:uppercase;font-weight:600;font-family:"Montserrat",sans-serif;font-size:clamp(10px,2.8vw,12px);color:var(--gold);letter-spacing:.06em;margin-top:2px}
+
+/* ---------- Panele ---------- */
+.panel{position:relative;width:100%;aspect-ratio:1000/219;background:url(img/panel.webp) center/100% 100% no-repeat;margin-top:10px;
+  filter:drop-shadow(0 4px 8px rgba(0,0,0,.5));display:flex;flex-direction:column;align-items:center;padding:3.5% 15% 0}
+.panel-title{text-transform:uppercase;font-weight:600;font-family:"Montserrat",sans-serif;font-size:clamp(14px,4.2vw,18px);letter-spacing:.12em;color:var(--gold);text-shadow:0 1px 2px #000}
+.panel .empty{flex:1}
+/* zdrowie */
+.panel.hp{padding:2.2% 14% 0;flex-direction:row;justify-content:space-between;align-items:center;cursor:pointer}
+.hp .sl,.hmid .sl{font-size:clamp(12px,3.6vw,15px);color:var(--gold);text-shadow:0 1px 2px #000}
+.hcol{display:flex;flex-direction:column;align-items:center;gap:3px}
+.hp .plaque{width:clamp(64px,18vw,80px)}
+.hp .plaque.rany{width:clamp(76px,22vw,96px)}
+.hp .gem{font-size:clamp(17px,5vw,22px)}
+.hp .gem.txt{font-size:clamp(12px,3.6vw,15px);font-weight:700;letter-spacing:.02em}
+.hp .gem small{font-size:.55em;opacity:.8;margin-left:1px}
+.hmid{flex:1;display:flex;flex-direction:column;align-items:center;gap:4px;padding:0 4px;min-width:0}
+.hst{font-size:clamp(12px,3.7vw,15px);font-weight:600;color:#fff;text-shadow:0 1px 2px #000;white-space:nowrap}
+.mini{display:flex;gap:3px;padding:3px 6px;border-radius:999px;border:1.5px solid #cdb67a;background:#123a2a}
+.mini span{width:9px;height:9px;border-radius:50%;border:1px solid #c4ad70;background:radial-gradient(circle at 40% 35%,#effff8,#8ff0cb 45%,#3aa883);box-shadow:0 0 4px rgba(143,240,203,.7)}
+.mini span.hurt{background:#d0402c;box-shadow:0 0 4px rgba(255,90,60,.7);border-color:#e3b778}
+.mini span.cur{outline:1.5px solid #ffe7a8;outline-offset:1px}
+.plaque.rany{background-image:url(img/plaque-rany.webp)}
+/* okienko zdrowia */
+.cur-big{text-align:center;margin-bottom:10px}
+.cur-big .n{font-size:22px;color:#fff;font-weight:600}.cur-big .p{font-size:22px;color:#ffb38a;font-weight:700;margin-left:6px}
+.cur-big .s{font-size:12px;color:#d8caa0;margin-top:2px}
+.lvls{margin-top:10px;max-height:52vh;overflow:auto}
+.lvl{display:grid;grid-template-columns:1fr auto;align-items:center;gap:4px 8px;padding:7px 6px;border-bottom:1px solid rgba(220,199,142,.18)}
+.lvl:last-child{border-bottom:0}
+.lvl .ln{font-size:14px;color:#f1e6c4}.lvl .lp{font-size:13px;font-weight:700;color:#ffb38a;text-align:right;min-width:24px}
+.lvl.cur{background:rgba(255,226,140,.08);border-radius:10px}
+.lvl.cur .ln{color:#fff;font-weight:600}
+.pips{grid-column:1/3;display:flex;flex-wrap:wrap;gap:5px}
+.pip{width:18px;height:18px;border-radius:50%;border:1.5px solid #c4ad70;background:#143a2b;cursor:pointer}
+.pip.on{background:radial-gradient(circle at 40% 35%,#ffb0a0,#d03a2a 55%,#7a140c);border-color:#e0b070}
+.panel.hcs{padding-top:3%;flex-direction:row;justify-content:space-around;align-items:center}
+.stat{display:flex;flex-direction:column;align-items:center;gap:4px;cursor:pointer}
+.stat .sl{font-size:clamp(14px,4.3vw,19px);color:var(--gold);text-shadow:0 1px 2px #000}
+
+/* plakietka z klejnotem */
+.plaque{position:relative;width:clamp(76px,22vw,100px);aspect-ratio:384/171;display:flex;align-items:center;justify-content:center;
+  background:center/100% 100% no-repeat;filter:drop-shadow(0 2px 3px rgba(0,0,0,.5))}
+.plaque.honor{background-image:url(img/plaque-honor.webp)}
+.plaque.chwala{background-image:url(img/plaque-chwala.webp)}
+.plaque.skaza{background-image:url(img/plaque-skaza.webp)}
+.gem{font-size:clamp(20px,6vw,27px);line-height:1;color:#f6efd8;text-shadow:0 1px 2px rgba(0,0,0,.75),0 0 6px rgba(0,0,0,.35);margin-top:1px}
+.plaque.skaza .gem{color:#f1ead6}
+.plaque.big{width:180px}
+.gem.big{font-size:46px}
+
+/* ---------- Umiejętności ---------- */
+.sframe{position:relative;border:2px solid #cdb67a;border-radius:26px;padding:16px 14px 18px;
+  background:linear-gradient(180deg,rgba(18,58,42,.88),rgba(10,40,29,.92));
+  box-shadow:inset 0 0 0 2px rgba(0,0,0,.35),inset 0 0 0 4px rgba(205,182,122,.25),0 8px 18px rgba(0,0,0,.5)}
+.sframe::before,.sframe::after{content:"";position:absolute;width:14px;height:14px;border-radius:50%;
+  background:radial-gradient(circle at 40% 35%,#d9fff0,#5fc9a2 50%,#1f6b4f);border:2px solid #cdb67a;box-shadow:0 0 6px rgba(120,230,190,.5)}
+.sframe::before{top:-8px;left:50%;transform:translateX(-50%)}
+.sframe::after{bottom:-8px;left:50%;transform:translateX(-50%)}
+.sgroup{margin-top:12px}
+.sgroup:first-child{margin-top:0}
+.sgh{font-size:18px;color:var(--gold);margin:0 0 4px;text-shadow:0 1px 2px #000}
+.srow{display:flex;align-items:center;gap:8px;padding:3px 2px 3px 10px;min-height:32px}
+.sname{flex:1;font-size:16px;color:#efe2bb;text-shadow:0 1px 2px #000;min-width:0;overflow:hidden;text-overflow:ellipsis}
+.srow.zero .sname{color:#a99c78}
+.sval{flex:none;width:32px;height:30px;display:flex;align-items:center;justify-content:center;font-size:15px;font-weight:600;color:#f6efd8;
+  clip-path:polygon(25% 0,75% 0,100% 50%,75% 100%,25% 100%,0 50%);background:linear-gradient(180deg,#e8d49a,#9c7a35);position:relative}
+.sval::before{content:"";position:absolute;inset:2px;clip-path:inherit;background:radial-gradient(circle at 40% 30%,#3c7a60,#173f2f 70%)}
+.sval span{position:relative}
+.srow.zero .sval span{opacity:.5}
+.sbtn{flex:none;width:28px;height:28px;border-radius:50%;border:1.5px solid #cdb67a;background:radial-gradient(circle at 40% 35%,#3a7d61,#163f2f);
+  color:var(--gold);font:600 17px/1 "Montserrat",sans-serif;display:flex;align-items:center;justify-content:center;cursor:pointer;padding:0}
+.sbtn:active{transform:scale(.9)}
+.sbtn:disabled{opacity:.3}
+.sdel{flex:none;width:22px;height:24px;border:0;background:none;color:#c98a7a;font-size:13px;opacity:.45;cursor:pointer;padding:0}
+.scost{font-size:10px;color:#cdbf98;margin-left:4px;white-space:nowrap}
+.sadd{display:flex;gap:6px;margin:6px 0 2px 10px}
+.sadd input{flex:1;min-width:0;padding:7px 10px;border-radius:999px;border:1px solid #cdb67a;background:rgba(6,30,20,.65);color:#fff;font:14px "Montserrat",sans-serif;outline:none;-webkit-user-select:text;user-select:text}
+.sadd button{flex:none;padding:0 12px;border-radius:999px;border:1.5px solid #cdb67a;background:linear-gradient(180deg,#2c6c51,#174332);color:var(--gold);font:600 13px "Montserrat",sans-serif;cursor:pointer}
+.xpbar{margin:0 auto 12px;width:max-content;max-width:100%;padding:7px 22px;font-size:13px;font-weight:600;letter-spacing:.06em;color:var(--gold);text-transform:uppercase;
+  background:linear-gradient(180deg,#245c45,#163f2f);border:2px solid #dcc78e;clip-path:polygon(6% 0,94% 0,100% 50%,94% 100%,6% 100%,0 50%)}
+.sempty{text-align:center;color:#cdbf98;font-size:14px;padding:18px 6px;line-height:1.5}
+.ssave{display:block;margin:16px auto 0}
+
+/* ---------- Placeholdery ---------- */
+.page-title{text-transform:uppercase;font-weight:600;font-family:"Montserrat",sans-serif;text-align:center;font-size:24px;letter-spacing:.12em;color:var(--gold);margin:10px 0 6px;text-shadow:0 2px 3px #000}
+.card{border:2px solid var(--gold2);border-radius:22px;background:linear-gradient(180deg,rgba(40,100,74,.85),rgba(16,58,42,.9));padding:18px;
+  box-shadow:inset 0 0 0 2px rgba(0,0,0,.25),0 6px 14px rgba(0,0,0,.45);text-align:center;color:#e9dcb3}
+.card .bigicon{width:120px;height:120px;margin:4px auto 10px;display:block}
+textarea.notes{width:100%;min-height:55vh;resize:vertical;background:rgba(6,30,20,.6);border:1px solid rgba(232,212,154,.5);border-radius:14px;
+  color:var(--text);font:16px/1.5 "Montserrat",sans-serif;padding:12px;-webkit-user-select:text;user-select:text;outline:none}
+
+/* ---------- Nawigacja ---------- */
+.nav{position:fixed;left:0;right:0;bottom:0;z-index:20;padding-bottom:env(safe-area-inset-bottom);
+  background:linear-gradient(180deg,rgba(8,34,24,.88),rgba(5,22,15,.97));border-top:1px solid rgba(232,212,154,.55);
+  box-shadow:0 -6px 16px rgba(0,0,0,.45);backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
+.nav .in{max-width:480px;margin:0 auto;height:var(--nav-h);display:grid;grid-template-columns:repeat(6,1fr);align-items:center}
+.nav button{background:none;border:0;display:flex;flex-direction:column;align-items:center;gap:2px;color:#cdbf98;font:inherit;cursor:pointer;padding:4px 0}
+.nav img{width:clamp(38px,11vw,50px);height:clamp(38px,11vw,50px);object-fit:contain;transition:transform .2s,filter .2s;filter:brightness(.82) saturate(.85)}
+.nav span{font-size:clamp(8.5px,2.4vw,10.5px);line-height:1.1;text-align:center;white-space:nowrap}
+.nav button.active img{transform:translateY(-3px) scale(1.08);filter:brightness(1.15) drop-shadow(0 0 6px rgba(255,226,140,.7))}
+.nav button.active span{color:#fff1c2}
+
+/* ---------- Modal ---------- */
+.overlay{position:fixed;inset:0;z-index:50;background:rgba(2,12,8,.62);backdrop-filter:blur(3px);-webkit-backdrop-filter:blur(3px);
+  display:none;align-items:center;justify-content:center;padding:20px}
+.overlay.open{display:flex;animation:fade .2s ease}
+.modal{position:relative;width:100%;max-width:400px;border-radius:34px;padding:34px 18px 20px;
+  background:radial-gradient(ellipse at 50% 0%,#347a5c,#1d4f3b 60%,#163f2f);border:3px solid #dcc78e;
+  box-shadow:inset 0 0 0 3px rgba(0,0,0,.28),inset 0 0 0 5px rgba(220,199,142,.35),0 0 30px rgba(230,214,150,.35),0 12px 30px rgba(0,0,0,.6)}
+.tag{text-transform:uppercase;font-weight:600;position:absolute;left:50%;top:0;transform:translate(-50%,-55%);white-space:nowrap;padding:7px 26px;
+  font-family:"Montserrat",sans-serif;letter-spacing:.1em;font-size:15px;color:var(--gold);
+  background:linear-gradient(180deg,#245c45,#163f2f);border:2px solid #dcc78e;clip-path:polygon(7% 0,93% 0,100% 50%,93% 100%,7% 100%,0 50%)}
+.row{display:flex;align-items:center;justify-content:center;gap:10px}
+.btn{min-width:54px;height:46px;border-radius:14px;border:2px solid #dcc78e;background:linear-gradient(180deg,#2c6c51,#174332);
+  color:var(--gold);font:20px "Montserrat",sans-serif;cursor:pointer;box-shadow:inset 0 1px 0 rgba(255,255,255,.2),0 2px 5px rgba(0,0,0,.4)}
+.btn:active{transform:scale(.94);filter:brightness(1.2)}
+.dots{display:flex;justify-content:space-between;gap:4px;margin:18px 4px 4px;padding:10px 12px;border-radius:999px;
+  border:2px solid #cdb67a;background:linear-gradient(180deg,#1b4c39,#133829)}
+.dot{width:22px;height:22px;border-radius:50%;border:2px solid #c4ad70;background:radial-gradient(circle at 40% 35%,#2b6a51,#123a2a);cursor:pointer;flex:none}
+.dot.on{background:radial-gradient(circle at 40% 35%,#effff8,#8ff0cb 45%,#3aa883);box-shadow:0 0 8px rgba(143,240,203,.8)}
+.decimal{text-align:center;font-size:14px;color:#d8caa0;margin-top:8px}
+.close{text-transform:uppercase;font-weight:600;display:block;margin:16px auto 0;padding:10px 34px;border-radius:999px;border:2px solid #dcc78e;
+  background:linear-gradient(180deg,#245c45,#163f2f);color:var(--gold);font:15px "Montserrat",sans-serif;letter-spacing:.1em;cursor:pointer}
+.trow{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:10px 6px;border-bottom:1px solid rgba(220,199,142,.2)}
+.trow:last-of-type{border-bottom:0}
+.trow .tn{font-size:17px;color:var(--text)}
+.trow .tv{font-size:26px;min-width:34px;text-align:center;color:#fff}
+.trow .btn{min-width:44px;height:40px;font-size:18px}
+.ringsum{text-align:center;margin-bottom:6px;font-size:14px;color:#d8caa0}
+.ringsum b{font-size:22px;color:#fff;font-weight:400}
+.tc{font-size:11px;color:#cdbf98;margin-top:3px}
+.pdline{text-align:center;font-size:13px;color:#d8caa0;margin:-2px 0 6px}
+.pdline b{color:#fff;font-weight:600}
+.field{display:block;margin:10px 0}
+.field span{display:block;font-size:13px;color:#d8caa0;margin-bottom:4px}
+.field input{width:100%;padding:10px 12px;border-radius:12px;border:1px solid #cdb67a;background:rgba(6,30,20,.65);color:#fff;font:17px "Montserrat",sans-serif;outline:none;-webkit-user-select:text;user-select:text}
+
+/* ---------- Tatuaże ---------- */
+.tat{border-bottom:1px solid rgba(220,199,142,.2)}
+.tat:last-of-type{border-bottom:0}
+.tat-h{display:flex;align-items:center;gap:8px;padding:11px 4px 11px 8px;cursor:pointer}
+.tat-n{flex:1;min-width:0;font-size:16px;color:#efe2bb;text-shadow:0 1px 2px #000;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.tat.open .tat-n{color:#fff}
+.tat-r{flex:none;padding:4px 14px;font-size:11px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--gold);white-space:nowrap;
+  background:linear-gradient(180deg,#245c45,#163f2f);border:1.5px solid #cdb67a;clip-path:polygon(10% 0,90% 0,100% 50%,90% 100%,10% 100%,0 50%)}
+.tat-r b{color:#fff;font-weight:700}
+.tat-ch{flex:none;width:18px;color:var(--gold2);font-size:12px;text-align:center;transition:transform .25s}
+.tat.open .tat-ch{transform:rotate(180deg)}
+.tat-b{display:grid;grid-template-rows:0fr;transition:grid-template-rows .28s ease}
+.tat.open .tat-b{grid-template-rows:1fr}
+.tat-b > div{overflow:hidden}
+.tat-d{margin:0 6px 12px 8px;padding:10px 12px;border-radius:14px;background:rgba(6,30,20,.55);border:1px solid rgba(232,212,154,.28);
+  font-size:14px;line-height:1.55;color:#e3d6ae;white-space:pre-wrap;word-wrap:break-word}
+.tat-d.none{color:#a99c78;font-style:italic}
+.tat-d b.rk{color:#f5c94e;font-weight:700;text-shadow:0 0 8px rgba(245,201,78,.5)}
+.tat-ed{flex:none;width:28px;height:28px;border-radius:50%;border:1.5px solid #cdb67a;background:radial-gradient(circle at 40% 35%,#3a7d61,#163f2f);
+  color:var(--gold);font-size:13px;display:flex;align-items:center;justify-content:center;cursor:pointer;padding:0}
+.tat-ed:active{transform:scale(.9)}
+.tat-ed.del{color:#e8a090;border-color:#b98a6a}
+.tat-add{display:block;margin:14px auto 0}
+.field textarea{width:100%;min-height:130px;resize:vertical;padding:10px 12px;border-radius:12px;border:1px solid #cdb67a;background:rgba(6,30,20,.65);color:#fff;
+  font:15px/1.45 "Montserrat",sans-serif;outline:none;-webkit-user-select:text;user-select:text}
+.field .hint{font-size:11.5px;color:#cdbf98;margin-top:4px}
+.field .hint b{color:var(--gold)}
+.fbad{border-color:#e0503c!important}
+
+/* ---------- Sztuki walki ---------- */
+.ma{padding:4px 0 12px;border-bottom:1px solid rgba(220,199,142,.22)}
+.ma + .ma{padding-top:14px}
+.ma:last-child{border-bottom:0;padding-bottom:2px}
+.ma-h{display:flex;align-items:center;gap:8px;margin-bottom:6px;padding-left:4px}
+.ma-n{flex:1;min-width:0;font-size:19px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--gold);text-shadow:0 1px 2px #000}
+.ma-r{display:flex;gap:8px;align-items:flex-start;padding:7px 2px 7px 4px}
+.ma-l{flex:none;min-width:62px;font-size:11px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--gold2);padding-top:3px}
+.ma-t{flex:1;min-width:0;font-size:14px;line-height:1.55;color:#e3d6ae;white-space:pre-wrap;word-wrap:break-word}
+.ma-t b.rk{color:#f5c94e;font-weight:700;text-shadow:0 0 8px rgba(245,201,78,.5)}
+.ma-r.locked .ma-l,.ma-r.locked .ma-t{opacity:.38}
+.ma-next{font-size:12px;color:#a99c78;font-style:italic;padding:4px 4px 0;line-height:1.45}
+.advbox + .advbox{margin-top:26px}
+.adv-title{font-size:19px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;color:var(--gold);text-shadow:0 1px 2px #000;padding:0 4px 6px;border-bottom:1px solid rgba(220,199,142,.22)}
+.adv-cost{margin:0 6px 6px 8px;font-size:12px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;color:var(--gold2)}
+.adv-cost b{color:#f5c94e;font-size:14px}
+.ma-none{font-size:13px;color:#a99c78;font-style:italic;padding:2px 4px}
+</style>
+</head>
+<body>
+<div class="app">
+
+  <div class="topbar">
+    <button class="gearbtn" id="btnSettings" aria-label="Ustawienia">
+      <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path fill="currentColor" d="M19.14 12.94a7.07 7.07 0 0 0 .05-.94 7.07 7.07 0 0 0-.05-.94l2.03-1.58a.5.5 0 0 0 .12-.64l-1.92-3.32a.5.5 0 0 0-.6-.22l-2.39.96a7.03 7.03 0 0 0-1.63-.94l-.36-2.54a.5.5 0 0 0-.5-.42h-3.84a.5.5 0 0 0-.5.42l-.36 2.54a7.03 7.03 0 0 0-1.63.94l-2.39-.96a.5.5 0 0 0-.6.22L2.66 8.84a.5.5 0 0 0 .12.64l2.03 1.58a7.07 7.07 0 0 0-.05.94c0 .32.02.63.05.94l-2.03 1.58a.5.5 0 0 0-.12.64l1.92 3.32a.5.5 0 0 0 .6.22l2.39-.96c.5.38 1.05.7 1.63.94l.36 2.54a.5.5 0 0 0 .5.42h3.84a.5.5 0 0 0 .5-.42l.36-2.54a7.03 7.03 0 0 0 1.63-.94l2.39.96a.5.5 0 0 0 .6-.22l1.92-3.32a.5.5 0 0 0-.12-.64l-2.03-1.58ZM12 15.5A3.5 3.5 0 1 1 12 8.5a3.5 3.5 0 0 1 0 7Z"/></svg>
+      <span class="gdot" id="gearDot"></span>
+    </button>
+    <button class="imgbtn" id="btnEdit" aria-label="Edytuj"><img src="img/btn-edytuj.webp" alt="Edytuj"></button>
+    <button class="imgbtn" id="btnPD" aria-label="Punkty Doświadczenia"><img src="img/btn-pd.webp" alt="PD"><span class="badge" id="pdBadge">0</span></button>
+  </div>
+
+  <!-- ===== KRĘGI (strona główna) ===== -->
+  <section class="page" data-page="kregi">
+    <div class="header" id="hdr">
+      <div class="name" id="charName">Imię postaci</div>
+      <div class="rankline" id="rankLine"></div>
+      <div class="divider"></div>
+      <div class="editbar">Tryb edycji – dotknij imienia lub kręgu</div>
+    </div>
+
+    <div class="circle" id="circle">
+      <img class="frame" src="img/frame.webp" alt="">
+      <div class="void-center" id="voidCenter">
+        <div class="num" id="vpNum">2</div>
+        <div class="lbl">Punkty Pustki</div>
+      </div>
+    </div>
+
+    <div class="panel hp" id="healthPanel">
+      <div class="hcol"><div class="sl">Kara</div><div class="plaque" id="hpPenPl"><div class="gem" id="hpPen"></div></div></div>
+      <div class="hmid"><div class="sl">Zdrowie</div><div class="hst" id="hpName"></div><div class="mini" id="hpMini"></div></div>
+      <div class="hcol"><div class="sl">Rany</div><div class="plaque rany"><div class="gem" id="hpWounds"></div></div></div>
+    </div>
+
+    <div class="panel hcs" id="hcsPanel"></div>
+  </section>
+
+  <!-- ===== Pozostałe strony ===== -->
+  <section class="page" data-page="umiejetnosci">
+    <h1 class="page-title">Umiejętności</h1>
+    <div class="sframe" id="skillsBox"></div>
+  </section>
+  <section class="page" data-page="tatuaze">
+    <h1 class="page-title">Tatuaże</h1>
+    <div class="sframe" id="tatBox"></div>
+  </section>
+  <section class="page" data-page="sztuki">
+    <h1 class="page-title">Sztuki walki</h1>
+    <div class="sframe" id="maBox"></div>
+  </section>
+  <section class="page" data-page="zalety">
+    <h1 class="page-title">Zalety i wady</h1>
+    <div class="sframe advbox" id="advBox" data-list="advantages"></div>
+    <div class="sframe advbox" id="disBox" data-list="disadvantages"></div>
+  </section>
+  <section class="page" data-page="notatki">
+    <h1 class="page-title">Notatki</h1>
+    <textarea class="notes" id="notes" placeholder="Zapisz tu swoje notatki…"></textarea>
+  </section>
+</div>
+
+<nav class="nav"><div class="in" id="nav"></div></nav>
+
+<div class="overlay" id="overlay"><div class="modal" id="modal"></div></div>
+
+<script>
+(() => {
+  const KEY = "l5k-karta-v1";
+  const PD_MIN = -5;
+  // Koszt w PD (L5K 1. ed.): cecha = 5 × nowa ranga, pustka = 6 × nowa ranga
+  const XP_MULT = { trait:5, pustka:6 };
+  const RANK_MIN = 1, RANK_MAX = 10;
+  const raiseCost = (cur, mult) => mult * (cur + 1);
+  const lowerRefund = (cur, mult) => mult * cur;
+  // zwraca nową wartość albo null (gdy zmiana niemożliwa); odejmuje/dodaje PD
+  function xpChange(cur, delta, mult){
+    if (delta > 0) {
+      if (cur >= RANK_MAX) return null;
+      const cost = raiseCost(cur, mult);
+      if (S.pd - cost < PD_MIN) { toast(`Za mało PD – potrzeba ${cost}`); return null; }
+      S.pd -= cost; toast(`−${cost} PD`); return cur + 1;
+    } else {
+      if (cur <= RANK_MIN) return null;
+      const back = lowerRefund(cur, mult);
+      S.pd += back; toast(`+${back} PD (zwrot)`); return cur - 1;
+    }
+  }
+
+  // ---- Definicje ----
+  const RINGS = [
+    { id:"pustka",    name:"Pustka",    color:"#a77bff", pos:[50,15.5], traits:null },
+    { id:"powietrze", name:"Powietrze", color:"#9fd8ff", pos:[84,40],   traits:[["refleks","Refleks"],["intuicja","Intuicja"]] },
+    { id:"woda",      name:"Woda",      color:"#2fe0c8", pos:[71,75],   traits:[["sila","Siła"],["percepcja","Percepcja"]] },
+    { id:"ziemia",    name:"Ziemia",    color:"#d29a4e", pos:[29,75],   traits:[["wytrzymalosc","Wytrzymałość"],["silaWoli","Siła Woli"]] },
+    { id:"ogien",     name:"Ogień",     color:"#ff6a2a", pos:[16,40],   traits:[["zrecznosc","Zręczność"],["inteligencja","Inteligencja"]] },
+  ];
+  const HCS = [
+    { id:"honor",  name:"Honor" },
+    { id:"chwala", name:"Chwała" },
+    { id:"skaza",  name:"Skaza" },
+  ];
+  const PAGES = [
+    { id:"kregi",        label:"Kręgi",        icon:"img/ic-kregi.webp" },
+    { id:"umiejetnosci", label:"Umiejętności", icon:"img/ic-umiejetnosci.webp" },
+    { id:"tatuaze",      label:"Tatuaże",      icon:"img/ic-tatuaze.webp" },
+    { id:"sztuki",       label:"Sztuki walki", icon:"img/ic-sztuki.webp" },
+    { id:"zalety",       label:"Zalety i wady",icon:"img/ic-zalety.webp" },
+    { id:"notatki",      label:"Notatki",      icon:"img/ic-notatki.webp" },
+  ];
+
+  const DEFAULT = {
+    name:"Imię postaci", sub:"Klan · Szkoła",
+    traits:{ refleks:2, intuicja:2, sila:2, percepcja:2, wytrzymalosc:2, silaWoli:2, zrecznosc:2, inteligencja:2 },
+    pustka:2, punktyPustki:2,
+    // wartości w dziesiątych częściach: 45 = 4 pełne + 5 punkcików
+    hcs:{ honor:50, chwala:10, skaza:0 },
+    rany:0,
+    skills:{}, customSkills:[], hiddenSkills:[], tattoos:[], martialText:{}, advantages:[], disadvantages:[],
+    pd:0, notes:"", page:"kregi",
+    settings:{ rankThresholds:[150,175,200,225,250,275,300,325,350] }
+  };
+
+  // ---- Zapis ----
+  let S;
+  try { S = Object.assign(structuredClone(DEFAULT), JSON.parse(localStorage.getItem(KEY) || "{}")); }
+  catch(e){ S = structuredClone(DEFAULT); }
+  S.traits = Object.assign({}, DEFAULT.traits, S.traits);
+  S.hcs = Object.assign({}, DEFAULT.hcs, S.hcs);
+  S.settings = Object.assign({}, structuredClone(DEFAULT.settings), S.settings);
+  S.skills = S.skills || {}; S.customSkills = S.customSkills || []; S.hiddenSkills = S.hiddenSkills || [];
+  S.tattoos = Array.isArray(S.tattoos) ? S.tattoos : [];
+  S.martialText = S.martialText && typeof S.martialText === "object" ? S.martialText : {};
+  S.advantages = Array.isArray(S.advantages) ? S.advantages : []; S.disadvantages = Array.isArray(S.disadvantages) ? S.disadvantages : [];
+  const save = () => { try { localStorage.setItem(KEY, JSON.stringify(S)); } catch(e){} scheduleFileWrite(); };
+  let scheduleFileWrite = () => {};
+
+  const $ = s => document.querySelector(s);
+  const ringValue = r => r.traits ? Math.min(...r.traits.map(([k]) => S.traits[k])) : S.pustka;
+
+  // ---- Render: nagłówek ----
+  function renderHeader(){
+    $("#charName").textContent = S.name || "Imię postaci";
+    const ins = insight();
+    $("#rankLine").innerHTML = `Ranga <b>${roman(insightRank(ins))}</b> – Prestiż <b>${ins}</b>`;
+  }
+
+  // ---- Render: kręgi ----
+  const circle = $("#circle");
+  RINGS.forEach(r => {
+    const el = document.createElement("div");
+    el.className = "ring"; el.dataset.id = r.id;
+    el.style.left = r.pos[0] + "%"; el.style.top = r.pos[1] + "%";
+    el.style.setProperty("--c", r.color);
+    el.style.setProperty("--m", `url(img/el-${r.id}.png)`);
+    el.innerHTML = `
+      <div class="orb">
+        <div class="el"></div>
+        <img class="glow" src="img/ring-${r.id}.webp" alt="">
+        <div class="val"><div class="num"></div><div class="lbl">${r.name}</div></div>
+      </div>
+      ${r.traits ? `<div class="traits">${r.traits.map(([k,n]) => `<div class="trait" data-k="${k}">${n}<b></b></div>`).join("")}</div>` : ""}`;
+    el.addEventListener("click", () => { if (!editing) return locked(); openRing(r); });
+    circle.appendChild(el);
+  });
+  function renderRings(){
+    RINGS.forEach(r => {
+      const el = circle.querySelector(`.ring[data-id="${r.id}"]`);
+      el.querySelector(".num").textContent = ringValue(r);
+      el.querySelectorAll(".trait").forEach(t => t.querySelector("b").textContent = S.traits[t.dataset.k]);
+    });
+    $("#vpNum").innerHTML = `${S.punktyPustki}<small>/${S.pustka}</small>`;
+  }
+
+  // ---- Render: honor / chwała / skaza ----
+  const hcsPanel = $("#hcsPanel");
+  HCS.forEach(h => {
+    const d = document.createElement("div");
+    d.className = "stat"; d.dataset.id = h.id;
+    d.innerHTML = `<div class="sl">${h.name}</div><div class="plaque ${h.id}"><div class="gem"></div></div>`;
+    d.addEventListener("click", () => openHCS(h));
+    hcsPanel.appendChild(d);
+  });
+  function renderHCS(){
+    HCS.forEach(h => hcsPanel.querySelector(`.stat[data-id="${h.id}"] .gem`).textContent = Math.floor(S.hcs[h.id] / 10));
+  }
+
+  // ---- Modal ----
+  const overlay = $("#overlay"), modal = $("#modal");
+  let onModalRender = null;
+  function openModal(render){ onModalRender = render; render(); overlay.classList.add("open"); }
+  function closeModal(){ overlay.classList.remove("open"); onModalRender = null; settingsOpen = false; }
+  overlay.addEventListener("click", e => { if (e.target === overlay) closeModal(); });
+  modal.addEventListener("click", e => {
+    const b = e.target.closest("[data-act]"); if (!b) return;
+    const act = b.dataset.act;
+    if (act === "close") return closeModal();
+    actions[act] && actions[act](b.dataset);
+    const sc = modal.querySelector(".lvls"), top = sc ? sc.scrollTop : 0;
+    save(); renderAll(); onModalRender && onModalRender();
+    const sc2 = modal.querySelector(".lvls"); if (sc2) sc2.scrollTop = top;
+  });
+
+  const clamp = (v, lo, hi) => Math.max(lo, Math.min(hi, v));
+  const actions = {
+    hcs:  d => { S.hcs[d.id] = Math.max(0, S.hcs[d.id] + Number(d.delta)); },
+    dot:  d => {
+      const full = Math.floor(S.hcs[d.id] / 10), cur = S.hcs[d.id] % 10, i = Number(d.i) + 1;
+      S.hcs[d.id] = full * 10 + (cur === i ? i - 1 : i);
+    },
+    trait:d => { const v = xpChange(S.traits[d.k], Number(d.delta), XP_MULT.trait); if (v !== null) S.traits[d.k] = v; },
+    pustka:d => { const v = xpChange(S.pustka, Number(d.delta), XP_MULT.pustka); if (v !== null) { S.pustka = v; S.punktyPustki = Math.min(S.punktyPustki, S.pustka); } },
+    vp:   d => { S.punktyPustki = clamp(S.punktyPustki + Number(d.delta), 0, S.pustka); },
+    pd:   d => { S.pd = Math.max(PD_MIN, S.pd + Number(d.delta)); },
+  };
+
+  function openHCS(h){
+    openModal(() => {
+      const v = S.hcs[h.id], full = Math.floor(v / 10), part = v % 10;
+      modal.innerHTML = `
+        <div class="tag">${h.name.toUpperCase()}</div>
+        <div class="row">
+          <button class="btn" data-act="hcs" data-id="${h.id}" data-delta="-1">(−)</button>
+          <div class="plaque big ${h.id}"><div class="gem big">${full}</div></div>
+          <button class="btn" data-act="hcs" data-id="${h.id}" data-delta="1">(+)</button>
+        </div>
+        <div class="dots">${Array.from({length:10}, (_, i) =>
+          `<div class="dot ${i < part ? "on" : ""}" data-act="dot" data-id="${h.id}" data-i="${i}"></div>`).join("")}</div>
+        <div class="decimal">${full}.${part}</div>
+        <button class="close" data-act="close">ZAMKNIJ</button>`;
+    });
+  }
+
+  function costLine(cur, mult){
+    const up = cur < RANK_MAX ? `+ ${raiseCost(cur, mult)} PD` : "maks.";
+    const down = cur > RANK_MIN ? `− zwrot ${lowerRefund(cur, mult)}` : "";
+    return `<div class="tc">${up}${down ? " · " + down : ""}</div>`;
+  }
+  function openRing(r){
+    if (!r.traits) return openVoid();
+    openModal(() => {
+      modal.innerHTML = `
+        <div class="tag">KRĄG: ${r.name.toUpperCase()}</div>
+        <div class="ringsum">Wartość kręgu (niższa z cech): <b>${ringValue(r)}</b></div>
+        <div class="pdline">Dostępne PD: <b>${S.pd}</b></div>
+        ${r.traits.map(([k, n]) => `
+          <div class="trow">
+            <button class="btn" data-act="trait" data-k="${k}" data-delta="-1">−</button>
+            <div style="flex:1;text-align:center"><div class="tn">${n}</div>${costLine(S.traits[k], XP_MULT.trait)}</div>
+            <div class="tv">${S.traits[k]}</div>
+            <button class="btn" data-act="trait" data-k="${k}" data-delta="1">+</button>
+          </div>`).join("")}
+        <button class="close" data-act="close">ZAMKNIJ</button>`;
+    });
+  }
+
+  function openVoid(){
+    openModal(() => {
+      modal.innerHTML = `
+        <div class="tag">KRĄG: PUSTKA</div>
+        ${editing ? `<div class="pdline">Dostępne PD: <b>${S.pd}</b></div>` : ""}
+        <div class="trow">
+          <button class="btn" data-act="pustka" data-delta="-1" ${editing ? "" : "disabled"}>−</button>
+          <div style="flex:1;text-align:center"><div class="tn">Ranga Pustki</div>${editing ? costLine(S.pustka, XP_MULT.pustka) : ""}</div>
+          <div class="tv">${S.pustka}</div>
+          <button class="btn" data-act="pustka" data-delta="1" ${editing ? "" : "disabled"}>+</button>
+        </div>
+        <div class="trow">
+          <button class="btn" data-act="vp" data-delta="-1">−</button>
+          <div style="flex:1;text-align:center"><div class="tn">Punkty Pustki</div></div>
+          <div class="tv">${S.punktyPustki}</div>
+          <button class="btn" data-act="vp" data-delta="1">+</button>
+        </div>
+        <button class="close" data-act="close">ZAMKNIJ</button>`;
+    });
+  }
+  $("#voidCenter").addEventListener("click", openVoid);
+
+  // edycja imienia
+  $("#hdr").addEventListener("click", () => {
+    if (!editing) return;
+    openModal(() => {
+      modal.innerHTML = `
+        <div class="tag">POSTAĆ</div>
+        <label class="field"><span>Imię</span><input id="inName" value=""></label>
+        <button class="close" data-act="close">ZAPISZ</button>`;
+      const a = $("#inName");
+      a.value = S.name;
+      a.oninput = () => { S.name = a.value; save(); renderHeader(); };
+    });
+  });
+
+  // ---- Notatki ----
+  const notes = $("#notes");
+  notes.value = S.notes || "";
+  notes.addEventListener("input", () => { S.notes = notes.value; save(); });
+
+  // ---- Nawigacja ----
+  const nav = $("#nav");
+  PAGES.forEach(p => {
+    const b = document.createElement("button");
+    b.dataset.page = p.id;
+    b.innerHTML = `<img src="${p.icon}" alt=""><span>${p.label}</span>`;
+    b.addEventListener("click", () => go(p.id));
+    nav.appendChild(b);
+  });
+  function go(id){
+    S.page = id; save();
+    document.querySelectorAll(".page").forEach(s => s.classList.toggle("active", s.dataset.page === id));
+    nav.querySelectorAll("button").forEach(b => b.classList.toggle("active", b.dataset.page === id));
+    window.scrollTo(0, 0);
+  }
+
+  // ---- Tryb edycji ----
+  let editing = false;
+  const btnEdit = $("#btnEdit");
+  btnEdit.addEventListener("click", () => {
+    editing = !editing;
+    document.body.classList.toggle("editing", editing);
+    btnEdit.classList.toggle("on", editing);
+    toast(editing ? "Edycja odblokowana" : "Edycja zablokowana");
+    renderSkills(); renderTattoos(); renderMartial(); renderAdv();
+  });
+  let toastT;
+  const toastEl = document.createElement("div"); toastEl.className = "toast"; document.body.appendChild(toastEl);
+  function toast(msg){ toastEl.textContent = msg; toastEl.classList.add("show"); clearTimeout(toastT); toastT = setTimeout(() => toastEl.classList.remove("show"), 1600); }
+  function locked(){ toast("Naciśnij „Edytuj”, aby zmienić kręgi"); }
+
+  // ---- Punkty Doświadczenia ----
+  $("#btnPD").addEventListener("click", () => {
+    openModal(() => {
+      modal.innerHTML = `
+        <div class="tag">PUNKTY DOŚWIADCZENIA</div>
+        <div class="pdbig">${S.pd}</div>
+        <div class="pdsub">dostępne PD</div>
+        <div class="pdrow">
+          <button class="btn" data-act="pd" data-delta="-5">−5</button>
+          <button class="btn" data-act="pd" data-delta="-1">−1</button>
+          <button class="btn" data-act="pd" data-delta="1">+1</button>
+          <button class="btn" data-act="pd" data-delta="5">+5</button>
+        </div>
+        <label class="field" style="margin-top:14px"><span>Ustaw dokładną wartość</span><input id="inPD" type="number" inputmode="numeric" min="-5" step="1"></label>
+        <button class="close" data-act="close">ZAMKNIJ</button>`;
+      const inp = $("#inPD"); inp.value = S.pd;
+      inp.onchange = () => { const v = Math.max(PD_MIN, Math.floor(Number(inp.value) || 0)); S.pd = v; save(); renderAll(); onModalRender && onModalRender(); };
+    });
+  });
+
+  // ---- Zdrowie ----
+  const WOUND_LEVELS = [["Zdrowy",""],["Draśnięty","−1"],["Lekko ranny","−2"],["Ranny","−3"],["Ciężko ranny","−4"],["Okaleczony","INJ"],["Powalony","TKO"],["Nieprzytomny","KO"]];
+  const earthRing = () => ringValue(RINGS.find(r => r.id === "ziemia"));
+  const perLevel = () => earthRing() * 2;
+  const totalHP = () => perLevel() * WOUND_LEVELS.length;
+  const curLevel = () => Math.min(WOUND_LEVELS.length - 1, Math.floor(Math.max(0, S.rany - 1) / perLevel()));
+  const levelFill = i => Math.max(0, Math.min(perLevel(), S.rany - i * perLevel()));
+  function renderHealth(){
+    S.rany = clamp(S.rany, 0, totalHP());
+    const c = curLevel(), [name, pen] = WOUND_LEVELS[c];
+    $("#hpName").textContent = name;
+    $("#hpPen").textContent = c === 0 ? "0" : (pen || "—");
+    $("#hpPen").classList.toggle("txt", c >= 5);
+    $("#hpPenPl").className = "plaque " + (c === 0 ? "chwala" : c <= 4 ? "honor" : "skaza");
+    $("#hpWounds").innerHTML = `${S.rany}<small>/${totalHP()}</small>`;
+    $("#hpMini").innerHTML = WOUND_LEVELS.map((_, i) => `<span class="${levelFill(i) > 0 ? "hurt" : ""} ${i === c ? "cur" : ""}"></span>`).join("");
+  }
+  function openHealth(){
+    openModal(() => {
+      const c = curLevel(), per = perLevel();
+      modal.innerHTML = `
+        <div class="tag">ZDROWIE</div>
+        <div class="cur-big"><span class="n">${WOUND_LEVELS[c][0]}</span><span class="p">${WOUND_LEVELS[c][1]}</span>
+          <div class="s">rany ${S.rany} / ${totalHP()} · ${per} pkt na poziom (Ziemia ${earthRing()} × 2)</div></div>
+        <div class="pdrow">
+          <button class="btn" data-act="wound" data-delta="-5">−5</button>
+          <button class="btn" data-act="wound" data-delta="-1">−1</button>
+          <button class="btn" data-act="wound" data-delta="1">+1</button>
+          <button class="btn" data-act="wound" data-delta="5">+5</button>
+        </div>
+        <div class="lvls">${WOUND_LEVELS.map(([n, p], i) => `
+          <div class="lvl ${i === c ? "cur" : ""}"><span class="ln">${i + 1}. ${n}</span><span class="lp">${p}</span>
+            <div class="pips">${Array.from({length: per}, (_, j) => {
+              const v = i * per + j + 1;
+              return `<span class="pip ${v <= S.rany ? "on" : ""}" data-act="woundset" data-v="${v}"></span>`; }).join("")}</div>
+          </div>`).join("")}</div>
+        <button class="close" data-act="close">ZAMKNIJ</button>`;
+    });
+  }
+  $("#healthPanel").addEventListener("click", openHealth);
+  Object.assign(actions, {
+    wound:    d => { S.rany = clamp(S.rany + Number(d.delta), 0, totalHP()); },
+    woundset: d => { const v = Number(d.v); S.rany = (S.rany === v) ? v - 1 : v; },
+  });
+
+  // ---- Umiejętności ----
+  // Grupy wg 1. edycji L5K (godne / bugei / kupieckie / niegodne). Lista startowa – można dodawać i usuwać.
+  const SKILL_GROUPS = [
+    { id:"godne", name:"Godne", skills:["Aktorstwo","Ceremonia herbaty","Etykieta","Gra w go","Heraldyka","Historia","Ikebana","Kaligrafia","Medycyna","Medytacja","Muzyka","Origami","Poezja","Prawo","Sztuka dworska","Szczerość","Shintao","Teologia","Wróżbiarstwo","Wiedza: Krainy Cienia"] },
+    { id:"bugei", name:"Bugei", skills:["Atletyka","Bojutsu","Dowodzenie","Iaijutsu","Jeździectwo","Jiujutsu","Kenjutsu","Kyujutsu","Naginata","Obrona","Polowanie","Shurikenjutsu","SW: Aikijutsu","SW: Tode","Tessenjutsu","Yarijutsu"] },
+    { id:"kupieckie", name:"Kupieckie", skills:["Handel","Hodowla zwierząt","Kowalstwo","Rachunki","Rzemiosło","Wycena","Żeglarstwo"] },
+    { id:"niegodne", name:"Niegodne", skills:["Fałszerstwo","Hazard","Kradzież kieszonkowa","Ninjutsu","Półświatek","Skradanie się","Tortury","Trucizny","Uwodzenie","Zręczne palce"] },
+  ];
+  const SKILL_MULT = 2, SKILL_MAX = 10;
+  const slug = s => s.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "").replace(/ł/g, "l").replace(/[^a-z0-9]+/g, "-").replace(/^-|-$/g, "");
+  const esc = s => String(s).replace(/[&<>"]/g, c => ({ "&":"&amp;", "<":"&lt;", ">":"&gt;", '"':"&quot;" }[c]));
+  function groupSkills(g){
+    const base = g.skills.map(n => ({ id: g.id + ":" + slug(n), name: n, custom: false }));
+    const cust = S.customSkills.filter(c => c.group === g.id).map(c => ({ id: c.id, name: c.name, custom: true }));
+    return base.concat(cust).filter(s => !S.hiddenSkills.includes(s.id))
+      .sort((a, b) => a.name.localeCompare(b.name, "pl"));
+  }
+  const skillsBox = $("#skillsBox");
+  function renderSkills(){
+    if (!editing) {
+      const groups = SKILL_GROUPS.map(g => ({ g, list: groupSkills(g).filter(s => (S.skills[s.id] || 0) > 0) })).filter(x => x.list.length);
+      skillsBox.innerHTML = groups.length ? groups.map(({ g, list }) => `
+        <div class="sgroup"><div class="sgh">*${g.name}</div>
+          ${list.map(s => `<div class="srow"><div class="sname">${esc(s.name)}</div><div class="sval"><span>${S.skills[s.id]}</span></div></div>`).join("")}
+        </div>`).join("")
+        : `<div class="sempty">Postać nie ma jeszcze umiejętności.<br>Naciśnij „Edytuj” u góry, aby je dodać.</div>`;
+      return;
+    }
+    skillsBox.innerHTML = `<div class="xpbar">Punkty doświadczenia: ${S.pd}</div>` + SKILL_GROUPS.map(g => `
+      <div class="sgroup"><div class="sgh">*${g.name}</div>
+        ${groupSkills(g).map(s => { const v = S.skills[s.id] || 0; return `
+          <div class="srow ${v ? "" : "zero"}">
+            <div class="sname">${esc(s.name)}<span class="scost">${v < SKILL_MAX ? "+" + SKILL_MULT * (v + 1) + " PD" : ""}</span></div>
+            ${v === 0 ? `<button class="sdel" data-sk="del" data-id="${s.id}" aria-label="Usuń">✕</button>` : ""}
+            <button class="sbtn" data-sk="dec" data-id="${s.id}" ${v ? "" : "disabled"}>−</button>
+            <div class="sval"><span>${v}</span></div>
+            <button class="sbtn" data-sk="inc" data-id="${s.id}" ${v < SKILL_MAX ? "" : "disabled"}>+</button>
+          </div>`; }).join("")}
+        <div class="sadd"><input placeholder="Nowa umiejętność…" data-group="${g.id}" maxlength="40"><button data-sk="add" data-group="${g.id}">Dodaj</button></div>
+      </div>`).join("") + `<button class="close ssave" data-sk="save">ZAPISZ</button>`;
+  }
+  skillsBox.addEventListener("click", e => {
+    const b = e.target.closest("[data-sk]"); if (!b) return;
+    const act = b.dataset.sk, id = b.dataset.id;
+    if (act === "save") { if (editing) btnEdit.click(); return; }
+    if (act === "inc" || act === "dec") {
+      const cur = S.skills[id] || 0;
+      if (act === "inc") {
+        if (cur >= SKILL_MAX) return;
+        const cost = SKILL_MULT * (cur + 1);
+        if (S.pd - cost < PD_MIN) { toast(`Za mało PD – potrzeba ${cost}`); return; }
+        S.pd -= cost; S.skills[id] = cur + 1; toast(`−${cost} PD`);
+      } else {
+        if (cur <= 0) return;
+        const back = SKILL_MULT * cur;
+        S.pd += back; S.skills[id] = cur - 1; toast(`+${back} PD (zwrot)`);
+        if (!S.skills[id]) delete S.skills[id];
+      }
+    }
+    if (act === "add") {
+      const inp = skillsBox.querySelector(`input[data-group="${b.dataset.group}"]`);
+      const name = inp.value.trim(); if (!name) { inp.focus(); return; }
+      const g = SKILL_GROUPS.find(x => x.id === b.dataset.group);
+      const nid = g.id + ":" + slug(name);
+      if (groupSkills(g).some(s => s.id === nid)) { toast("Taka umiejętność już jest"); return; }
+      S.hiddenSkills = S.hiddenSkills.filter(x => x !== nid);
+      if (!g.skills.some(n => g.id + ":" + slug(n) === nid)) S.customSkills.push({ id: nid, name, group: g.id });
+      toast("Dodano: " + name);
+    }
+    if (act === "del") {
+      const isCustom = S.customSkills.some(c => c.id === id);
+      if (isCustom) S.customSkills = S.customSkills.filter(c => c.id !== id);
+      else S.hiddenSkills.push(id);
+      delete S.skills[id];
+    }
+    save(); renderAll();
+  });
+  skillsBox.addEventListener("keydown", e => {
+    if (e.key === "Enter" && e.target.matches(".sadd input")) skillsBox.querySelector(`button[data-sk="add"][data-group="${e.target.dataset.group}"]`).click();
+  });
+
+
+  // ---- Tatuaże ----
+  // XX w opisie = obecna ranga postaci (pogrubiona, złota)
+  const tatBox = $("#tatBox");
+  let tatOpen = null;
+  const tatList = () => S.tattoos.slice().sort((a, b) => a.rank - b.rank);
+  const tatDesc = d => esc(d).replace(/XX/g, `<b class="rk">${insightRank(insight())}</b>`);
+  function renderTattoos(){
+    const list = tatList();
+    if (!list.length) {
+      tatBox.innerHTML = `<div class="sempty">Postać nie ma jeszcze tatuaży.<br>${editing ? "" : "Naciśnij „Edytuj” u góry, aby je dodać."}</div>`
+        + (editing ? `<button class="close tat-add" data-tt="add">+ DODAJ TATUAŻ</button>` : "");
+      return;
+    }
+    tatBox.innerHTML = list.map(t => `
+      <div class="tat ${t.id === tatOpen ? "open" : ""}" data-id="${t.id}">
+        <div class="tat-h" data-tt="toggle" data-id="${t.id}">
+          <div class="tat-n">${esc(t.name)}</div>
+          <div class="tat-r">Ranga <b>${roman(t.rank)}</b></div>
+          ${editing ? `<button class="tat-ed" data-tt="edit" data-id="${t.id}" aria-label="Edytuj">✎</button>
+                       <button class="tat-ed del" data-tt="del" data-id="${t.id}" aria-label="Usuń">✕</button>`
+                    : `<div class="tat-ch">▼</div>`}
+        </div>
+        <div class="tat-b"><div><div class="tat-d ${t.desc.trim() ? "" : "none"}">${t.desc.trim() ? tatDesc(t.desc) : "Brak opisu."}</div></div></div>
+      </div>`).join("") + (editing ? `<button class="close tat-add" data-tt="add">+ DODAJ TATUAŻ</button>` : "");
+  }
+  tatBox.addEventListener("click", e => {
+    const b = e.target.closest("[data-tt]"); if (!b) return;
+    const act = b.dataset.tt, id = b.dataset.id;
+    if (act === "toggle") {
+      tatOpen = tatOpen === id ? null : id;
+      tatBox.querySelectorAll(".tat").forEach(el => el.classList.toggle("open", el.dataset.id === tatOpen));
+      return;
+    }
+    e.stopPropagation();
+    if (act === "add") openTattoo(null);
+    if (act === "edit") openTattoo(S.tattoos.find(t => t.id === id));
+    if (act === "del") confirmTattooDel(S.tattoos.find(t => t.id === id));
+  });
+  function openTattoo(t){
+    const isNew = !t;
+    openModal(() => {
+      modal.innerHTML = `
+        <div class="tag">${isNew ? "NOWY TATUAŻ" : "EDYCJA TATUAŻU"}</div>
+        <div class="mscroll">
+          <label class="field"><span>Nazwa</span><input id="ttName" maxlength="60"></label>
+          <label class="field"><span>Ranga, na której postać dostała tatuaż</span><input id="ttRank" type="number" inputmode="numeric" min="1" max="10" step="1"></label>
+          <label class="field"><span>Opis</span><textarea id="ttDesc"></textarea>
+            <div class="hint">Wpisz <b>XX</b> tam, gdzie ma się pojawić obecna ranga postaci.</div></label>
+        </div>
+        <div class="brow" style="margin-top:14px"><button class="close" id="ttSave">ZAPISZ</button><button class="close" data-act="close">ANULUJ</button></div>`;
+      $("#ttName").value = t ? t.name : "";
+      $("#ttRank").value = t ? t.rank : insightRank(insight());
+      $("#ttDesc").value = t ? t.desc : "";
+      $("#ttSave").onclick = () => {
+        const name = $("#ttName").value.trim(), rank = Math.floor(Number($("#ttRank").value));
+        const okName = !!name, okRank = rank >= 1 && rank <= 10;
+        $("#ttName").classList.toggle("fbad", !okName); $("#ttRank").classList.toggle("fbad", !okRank);
+        if (!okName) { toast("Podaj nazwę tatuażu"); return; }
+        if (!okRank) { toast("Ranga od 1 do 10"); return; }
+        const desc = $("#ttDesc").value;
+        if (isNew) { const nt = { id: "t" + Date.now().toString(36) + Math.random().toString(36).slice(2, 5), name, rank, desc }; S.tattoos.push(nt); tatOpen = nt.id; toast("Dodano: " + name); }
+        else { Object.assign(t, { name, rank, desc }); toast("Zapisano zmiany"); }
+        save(); closeModal(); renderAll();
+      };
+      if (isNew) setTimeout(() => $("#ttName") && $("#ttName").focus(), 50);
+    });
+  }
+  function confirmTattooDel(t){
+    if (!t) return;
+    openModal(() => {
+      modal.innerHTML = `
+        <div class="tag">USUNĄĆ TATUAŻ?</div>
+        <p style="text-align:center;font-size:16px;margin:4px 0">${esc(t.name)}</p>
+        <p style="text-align:center;font-size:12px;color:#d8caa0">Tej operacji nie można cofnąć.</p>
+        <div class="brow" style="margin-top:14px"><button class="close" id="ttDelYes">USUŃ</button><button class="close" data-act="close">ANULUJ</button></div>`;
+      $("#ttDelYes").onclick = () => { S.tattoos = S.tattoos.filter(x => x !== t); if (tatOpen === t.id) tatOpen = null; save(); closeModal(); renderAll(); toast("Usunięto tatuaż"); };
+    });
+  }
+
+  // ---- Sztuki walki ----
+  // Tekst w {nawiasach} podstawia się automatycznie: {Ranga}, {Prestiż}, {Krąg Ogień}, {Siła} itd.
+  const MARTIAL = [
+    { id:"tode", name:"Tode", skill:"bugei:" + slug("SW: Tode"), ranks:[
+      "Do inicjatywy dodaje się Ranga {Ranga}. Dodajesz Ogień {Krąg Ogień} do inicjatywy i ataku.",
+      "Za każde podbicie otrzymujesz nie jedną, a dwie dodatkowe kości do określenia wielkości zadanych obrażeń.",
+      "Dwa ataki.",
+      "Wydając Punkt Pustki możesz w tej rundzie zignorować efektywność pancerza noszonego przez przeciwnika.",
+      "Trzy ataki." ] },
+    { id:"aikijutsu", name:"Aikijutsu", skill:"bugei:" + slug("SW: Aikijutsu"), ranks:[
+      "Dodajesz Powietrze {Krąg Powietrze} do Obrony i ataku.",
+      "Jeśli w bezpośrednim starciu Powietrze przeciwnika jest mniejsze od twojego, jego inicjatywa zawsze będzie niższa od twojej niezależnie od tego, jak wspaniały wynik udało mu się wyrzucić przy pomocy kości.",
+      "Jeśli w bezpośrednim starciu cios przeciwnika wymierzony w bohatera chybi, w następnej rundzie wróg odejmuje 5 punktów od swoich rzutów ataku i wielkości zadawanych strat.",
+      "Określając wielkość zadanych wrogowi strat dodaje się do wyniku jego własną Siłę x 2.",
+      "Dwa ataki." ] },
+  ];
+  const maBox = $("#maBox");
+  const maText = (m, i) => (S.martialText[m.id] && typeof S.martialText[m.id][i] === "string") ? S.martialText[m.id][i] : m.ranks[i];
+  function maValue(key){
+    const k = key.trim().toLowerCase();
+    if (k === "ranga") return insightRank(insight());
+    if (k === "prestiż" || k === "prestiz") return insight();
+    const ringName = k.replace(/^krąg\s+/, "").replace(/^krag\s+/, "");
+    const ring = RINGS.find(r => r.name.toLowerCase() === ringName);
+    if (ring) return ringValue(ring);
+    for (const r of RINGS) for (const [tk, tn] of (r.traits || [])) if (tn.toLowerCase() === k) return S.traits[tk];
+    return null;
+  }
+  const maFill = t => esc(t).replace(/\{([^{}]+)\}/g, (all, key) => { const v = maValue(key); return v === null ? all : `<b class="rk">${v}</b>`; });
+  function maRank(m){ return Math.min(insightRank(insight()), S.skills[m.skill] || 0, m.ranks.length); }
+  function renderMartial(){
+    const charRank = insightRank(insight());
+    maBox.innerHTML = MARTIAL.map(m => {
+      const r = maRank(m), skill = S.skills[m.skill] || 0;
+      const shown = editing ? m.ranks.length : r;
+      const rows = Array.from({ length: shown }, (_, i) => `
+        <div class="ma-r ${i < r ? "" : "locked"}">
+          <div class="ma-l">Ranga ${roman(i + 1)}</div>
+          <div class="ma-t">${maFill(maText(m, i))}</div>
+          ${editing ? `<button class="tat-ed" data-ma="edit" data-id="${m.id}" data-i="${i}" aria-label="Edytuj">✎</button>` : ""}
+        </div>`).join("");
+      let next = "";
+      if (!editing && r < m.ranks.length) {
+        const need = [];
+        if (skill < r + 1) need.push(`umiejętności SW: ${m.name} na poziomie ${r + 1}`);
+        if (charRank < r + 1) need.push(`rangi postaci ${roman(r + 1)}`);
+        next = `<div class="ma-next">Ranga ${roman(r + 1)} wymaga ${need.join(" i ")}.</div>`;
+      }
+      return `<div class="ma">
+        <div class="ma-h"><div class="ma-n">${esc(m.name)}</div><div class="tat-r">Ranga <b>${r ? roman(r) : "0"}</b></div></div>
+        ${!editing && r === 0 ? `<div class="ma-none">Ta sztuka nie jest jeszcze dostępna.</div>` : ""}
+        ${rows}${next}
+      </div>`;
+    }).join("");
+  }
+  maBox.addEventListener("click", e => {
+    const b = e.target.closest("[data-ma]"); if (!b) return;
+    const m = MARTIAL.find(x => x.id === b.dataset.id), i = Number(b.dataset.i);
+    openModal(() => {
+      modal.innerHTML = `
+        <div class="tag">${esc(m.name.toUpperCase())} – RANGA ${roman(i + 1)}</div>
+        <div class="mscroll">
+          <label class="field"><span>Opis rangi</span><textarea id="maTxt"></textarea>
+            <div class="hint">W nawiasach klamrowych wpisz, co ma się podstawiać samo:
+              <b>{Ranga}</b>, <b>{Prestiż}</b>, <b>{Krąg Ogień}</b>, <b>{Krąg Powietrze}</b>, <b>{Siła}</b> itd.</div></label>
+        </div>
+        <div class="brow" style="margin-top:14px"><button class="close" id="maSave">ZAPISZ</button><button class="close" id="maReset">DOMYŚLNY</button><button class="close" data-act="close">ANULUJ</button></div>`;
+      $("#maTxt").value = maText(m, i);
+      const setText = v => { const arr = (S.martialText[m.id] || []).slice(); arr[i] = v; S.martialText[m.id] = arr; };
+      $("#maSave").onclick = () => { setText($("#maTxt").value); save(); closeModal(); renderAll(); toast("Zapisano opis"); };
+      $("#maReset").onclick = () => { $("#maTxt").value = m.ranks[i]; };
+    });
+  });
+
+  // ---- Zalety i wady ----
+  // Nazwa, koszt, opis. Nie wpływają na PD.
+  const ADV = {
+    advantages:    { box: "#advBox", title: "Zalety", one: "zaleta", acc: "zaletę", empty: "Postać nie ma jeszcze zalet." },
+    disadvantages: { box: "#disBox", title: "Wady",   one: "wada",   acc: "wadę",   empty: "Postać nie ma jeszcze wad." },
+  };
+  const advOpen = { advantages: null, disadvantages: null };
+  function renderAdv(){
+    for (const key of Object.keys(ADV)) {
+      const cfg = ADV[key], box = $(cfg.box), list = S[key];
+      const add = editing ? `<button class="close tat-add" data-av="add">+ DODAJ ${cfg.acc.toUpperCase()}</button>` : "";
+      box.innerHTML = `<div class="adv-title">${cfg.title}</div>` + (list.length ? list.map(a => `
+        <div class="tat ${a.id === advOpen[key] ? "open" : ""}" data-id="${a.id}">
+          <div class="tat-h" data-av="toggle" data-id="${a.id}">
+            <div class="tat-n">${esc(a.name)}</div>
+            ${editing ? `<button class="tat-ed" data-av="edit" data-id="${a.id}" aria-label="Edytuj">✎</button>
+                         <button class="tat-ed del" data-av="del" data-id="${a.id}" aria-label="Usuń">✕</button>`
+                      : `<div class="tat-ch">▼</div>`}
+          </div>
+          <div class="tat-b"><div>
+            <div class="adv-cost">Koszt: <b>${esc(a.cost === "" || a.cost == null ? "—" : a.cost)}</b></div>
+            <div class="tat-d ${String(a.desc || "").trim() ? "" : "none"}">${String(a.desc || "").trim() ? esc(a.desc) : "Brak opisu."}</div>
+          </div></div>
+        </div>`).join("")
+        : `<div class="sempty">${cfg.empty}${editing ? "" : "<br>Naciśnij „Edytuj” u góry, aby je dodać."}</div>`) + add;
+    }
+  }
+  document.querySelectorAll(".advbox").forEach(box => box.addEventListener("click", e => {
+    const b = e.target.closest("[data-av]"); if (!b) return;
+    const key = box.dataset.list, act = b.dataset.av, id = b.dataset.id;
+    if (act === "toggle") {
+      advOpen[key] = advOpen[key] === id ? null : id;
+      box.querySelectorAll(".tat").forEach(el => el.classList.toggle("open", el.dataset.id === advOpen[key]));
+      return;
+    }
+    e.stopPropagation();
+    if (act === "add") openAdv(key, null);
+    if (act === "edit") openAdv(key, S[key].find(a => a.id === id));
+    if (act === "del") confirmAdvDel(key, S[key].find(a => a.id === id));
+  }));
+  function openAdv(key, a){
+    const cfg = ADV[key], isNew = !a;
+    openModal(() => {
+      modal.innerHTML = `
+        <div class="tag">${isNew ? "NOWA " + cfg.one.toUpperCase() : "EDYCJA: " + cfg.one.toUpperCase()}</div>
+        <div class="mscroll">
+          <label class="field"><span>Nazwa</span><input id="avName" maxlength="60"></label>
+          <label class="field"><span>Koszt</span><input id="avCost" type="number" inputmode="numeric" step="1"></label>
+          <label class="field"><span>Opis</span><textarea id="avDesc"></textarea></label>
+        </div>
+        <div class="brow" style="margin-top:14px"><button class="close" id="avSave">ZAPISZ</button><button class="close" data-act="close">ANULUJ</button></div>`;
+      $("#avName").value = a ? a.name : ""; $("#avCost").value = a ? a.cost : ""; $("#avDesc").value = a ? a.desc : "";
+      $("#avSave").onclick = () => {
+        const name = $("#avName").value.trim(), costRaw = $("#avCost").value.trim(), desc = $("#avDesc").value;
+        $("#avName").classList.toggle("fbad", !name);
+        if (!name) { toast("Podaj nazwę"); return; }
+        const cost = costRaw === "" ? "" : Math.floor(Number(costRaw));
+        if (isNew) { const na = { id: "a" + Date.now().toString(36) + Math.random().toString(36).slice(2, 5), name, cost, desc }; S[key].push(na); advOpen[key] = na.id; toast("Dodano: " + name); }
+        else { Object.assign(a, { name, cost, desc }); toast("Zapisano zmiany"); }
+        save(); closeModal(); renderAll();
+      };
+      if (isNew) setTimeout(() => $("#avName") && $("#avName").focus(), 50);
+    });
+  }
+  function confirmAdvDel(key, a){
+    if (!a) return;
+    const cfg = ADV[key];
+    openModal(() => {
+      modal.innerHTML = `
+        <div class="tag">USUNĄĆ ${cfg.acc.toUpperCase()}?</div>
+        <p style="text-align:center;font-size:16px;margin:4px 0">${esc(a.name)}</p>
+        <p style="text-align:center;font-size:12px;color:#d8caa0">Tej operacji nie można cofnąć.</p>
+        <div class="brow" style="margin-top:14px"><button class="close" id="avDelYes">USUŃ</button><button class="close" data-act="close">ANULUJ</button></div>`;
+      $("#avDelYes").onclick = () => { S[key] = S[key].filter(x => x !== a); if (advOpen[key] === a.id) advOpen[key] = null; save(); closeModal(); renderAll(); toast("Usunięto"); };
+    });
+  }
+
+  // ---- Prestiż i ranga ----
+  // Prestiż = suma kręgów × 10 + suma umiejętności (bez umiejętności „Nagash”)
+  // Ranga: progi z ustawień (domyślnie II od 150, potem co 25)
+  const INSIGHT_EXCLUDED = ["nagash"];
+  function insight(){
+    const rings = RINGS.reduce((s, r) => s + ringValue(r), 0) * 10;
+    const skills = Object.entries(S.skills || {}).reduce((s, [id, v]) => INSIGHT_EXCLUDED.includes(id.split(":").pop()) ? s : s + v, 0);
+    return rings + skills;
+  }
+  const insightRank = ins => 1 + S.settings.rankThresholds.filter(t => ins >= t).length;
+  const roman = n => { const m = [[10,"X"],[9,"IX"],[5,"V"],[4,"IV"],[1,"I"]]; let s = ""; for (const [v, r] of m) while (n >= v) { s += r; n -= v; } return s; };
+
+  // ---- Ustawienia ----
+  const DEFAULT_THRESHOLDS = DEFAULT.settings.rankThresholds.slice();
+  const fsSupported = typeof window.showSaveFilePicker === "function";
+  let fileHandle = null, filePerm = "none", fileStatus = "";
+  // pamięć uchwytu pliku (IndexedDB)
+  const idb = (mode, fn) => new Promise((res, rej) => {
+    const r = indexedDB.open("l5k-karta", 1);
+    r.onupgradeneeded = () => r.result.createObjectStore("kv");
+    r.onsuccess = () => { try { const tx = r.result.transaction("kv", mode); const q = fn(tx.objectStore("kv")); tx.oncomplete = () => res(q && q.result); tx.onerror = () => rej(tx.error); } catch (e) { rej(e); } };
+    r.onerror = () => rej(r.error);
+  });
+  const idbGet = k => idb("readonly", s => s.get(k)).catch(() => null);
+  const idbSet = (k, v) => idb("readwrite", s => s.put(v, k)).catch(() => {});
+  const idbDel = k => idb("readwrite", s => s.delete(k)).catch(() => {});
+
+  const fileName = () => {
+    const safe = (S.name || "postac").normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/ł/g, "l").replace(/Ł/g, "L").replace(/[^a-z0-9]+/gi, "-").replace(/^-|-$/g, "").toLowerCase() || "postac";
+    return `karta-l5k-${safe}.json`;
+  };
+  const exportData = () => JSON.stringify({ app: "karta-l5k", version: 1, saved: new Date().toISOString(), data: S }, null, 2);
+
+  async function writeToFile(){
+    if (!fileHandle || filePerm !== "granted") return;
+    try { const w = await fileHandle.createWritable(); await w.write(exportData()); await w.close();
+      fileStatus = "Ostatni zapis: " + new Date().toLocaleTimeString("pl-PL", { hour: "2-digit", minute: "2-digit", second: "2-digit" });
+    } catch (e) { filePerm = "prompt"; fileStatus = "Nie udało się zapisać – wznów połączenie."; }
+    updateGearDot(); if (settingsOpen) renderSettings();
+  }
+  let fileT;
+  scheduleFileWrite = () => { if (!fileHandle) return; clearTimeout(fileT); fileT = setTimeout(writeToFile, 700); };
+  const updateGearDot = () => $("#gearDot").classList.toggle("on", !!fileHandle && filePerm !== "granted");
+
+  async function restoreFileHandle(){
+    if (!fsSupported) return;
+    const h = await idbGet("fileHandle"); if (!h) return;
+    fileHandle = h;
+    try { filePerm = await h.queryPermission({ mode: "readwrite" }); } catch (e) { filePerm = "prompt"; }
+    fileStatus = filePerm === "granted" ? "Połączono." : "Połączenie wstrzymane – dotknij „Wznów”.";
+    updateGearDot();
+  }
+  async function connectNewFile(){
+    try {
+      const h = await window.showSaveFilePicker({ suggestedName: fileName(), types: [{ description: "Karta L5K", accept: { "application/json": [".json"] } }] });
+      fileHandle = h; filePerm = "granted"; await idbSet("fileHandle", h); await writeToFile();
+      toast("Połączono z plikiem");
+    } catch (e) { if (e && e.name !== "AbortError") { fileStatus = "Ta przeglądarka nie pozwoliła połączyć pliku."; renderSettings(); } }
+  }
+  async function connectExistingFile(){
+    try {
+      const [h] = await window.showOpenFilePicker({ types: [{ description: "Karta L5K", accept: { "application/json": [".json"] } }] });
+      const data = parseCard(await (await h.getFile()).text());
+      if (!data) { fileStatus = "Ten plik nie zawiera postaci z karty L5K."; renderSettings(); return; }
+      const p = await h.requestPermission({ mode: "readwrite" });
+      askImport(data, h.name, async () => { fileHandle = h; filePerm = p; await idbSet("fileHandle", h); fileStatus = "Połączono."; updateGearDot(); });
+    } catch (e) { if (e && e.name !== "AbortError") { fileStatus = "Ta przeglądarka nie pozwoliła otworzyć pliku."; renderSettings(); } }
+  }
+  async function resumeFile(){
+    try { filePerm = await fileHandle.requestPermission({ mode: "readwrite" }); } catch (e) { filePerm = "denied"; }
+    if (filePerm === "granted") { await writeToFile(); toast("Połączenie wznowione"); }
+    else { fileStatus = "Brak zgody na zapis do pliku."; renderSettings(); }
+    updateGearDot();
+  }
+  async function disconnectFile(){ fileHandle = null; filePerm = "none"; fileStatus = ""; await idbDel("fileHandle"); updateGearDot(); renderSettings(); toast("Rozłączono plik"); }
+
+  function parseCard(text){
+    let obj; try { obj = JSON.parse(text); } catch (e) { return null; }
+    const data = obj && obj.app === "karta-l5k" ? obj.data : obj;
+    return data && typeof data === "object" && data.traits ? data : null;
+  }
+  function applyData(data){
+    S = Object.assign(structuredClone(DEFAULT), data);
+    S.traits = Object.assign({}, DEFAULT.traits, data.traits);
+    S.hcs = Object.assign({}, DEFAULT.hcs, data.hcs);
+    S.settings = Object.assign({}, structuredClone(DEFAULT.settings), data.settings);
+    S.skills = S.skills || {}; S.customSkills = S.customSkills || []; S.hiddenSkills = S.hiddenSkills || [];
+    S.tattoos = Array.isArray(S.tattoos) ? S.tattoos : [];
+  S.martialText = S.martialText && typeof S.martialText === "object" ? S.martialText : {};
+  S.advantages = Array.isArray(S.advantages) ? S.advantages : []; S.disadvantages = Array.isArray(S.disadvantages) ? S.disadvantages : [];
+    notes.value = S.notes || ""; save(); renderAll();
+  }
+  function askImport(data, fname, after){
+    settingsOpen = false;
+    openModal(() => {
+      modal.innerHTML = `
+        <div class="tag">WCZYTAĆ POSTAĆ?</div>
+        <p style="text-align:center;font-size:16px;margin:4px 0">${esc(data.name || "Bez imienia")}</p>
+        <p style="text-align:center;font-size:12px;color:#d8caa0">z pliku ${esc(fname)}<br>Obecna postać zostanie zastąpiona.</p>
+        <div class="brow" style="margin-top:14px"><button class="close" id="impYes">WCZYTAJ</button><button class="close" id="impNo">ANULUJ</button></div>`;
+      $("#impYes").onclick = async () => { applyData(data); if (after) await after(); toast("Wczytano postać"); openSettings(); };
+      $("#impNo").onclick = openSettings;
+    });
+  }
+
+  let settingsOpen = false;
+  let dlNS = null;
+  try { if (window.claude && typeof window.claude.use === "function") window.claude.use("downloads").then(x => { dlNS = x; }).catch(() => {}); } catch (e) {}
+  function renderSettings(){
+    if (!settingsOpen) return;
+    const t = S.settings.rankThresholds;
+    const sc = modal.querySelector(".mscroll"), top = sc ? sc.scrollTop : 0;
+    let fileSec;
+    if (!fsSupported) fileSec = `<p>Automatyczny zapis do pliku działa tylko w niektórych przeglądarkach (np. Chrome lub Edge na komputerze). Na tym urządzeniu używaj eksportu i importu powyżej.</p>`;
+    else if (!fileHandle) fileSec = `<p>Połącz kartę z plikiem, a każda zmiana zapisze się w nim automatycznie.</p>
+        <div class="brow"><button class="close" id="fsNew">NOWY PLIK</button><button class="close" id="fsOpen">OTWÓRZ ISTNIEJĄCY</button></div>`;
+    else fileSec = `<div class="fstat ${filePerm === "granted" ? "" : "warn"}">Plik: <b>${esc(fileHandle.name)}</b><br>${esc(fileStatus)}</div>
+        <div class="brow">${filePerm === "granted" ? "" : `<button class="close" id="fsResume">WZNÓW</button>`}<button class="close" id="fsOff">ROZŁĄCZ</button></div>`;
+    modal.innerHTML = `
+      <div class="tag">USTAWIENIA</div>
+      <div class="mscroll">
+        <div class="sec"><h3>Progi prestiżu</h3>
+          <p>Od ilu punktów prestiżu zaczyna się dana ranga. Ranga I obowiązuje poniżej progu rangi II.</p>
+          <div class="thr">${t.map((v, i) => `<label>Ranga ${roman(i + 2)}<input type="number" inputmode="numeric" data-thr="${i}" value="${v}"></label>`).join("")}</div>
+          <div class="brow"><button class="close" id="thrReset">PRZYWRÓĆ DOMYŚLNE</button></div>
+        </div>
+        <div class="sec"><h3>Kopia zapasowa</h3>
+          <p>Zapisz postać do pliku albo wczytaj ją z pliku, np. żeby przenieść ją na inny telefon.</p>
+          <div class="brow"><button class="close" id="bkSave">EKSPORT DO PLIKU</button><button class="close" id="bkLoad">IMPORT Z PLIKU</button></div>
+          <input type="file" id="bkFile" accept=".json,application/json" hidden>
+          <div class="fstat" id="bkInfo"></div>
+        </div>
+        <div class="sec"><h3>Automatyczny zapis do pliku</h3>${fileSec}</div>
+      </div>
+      <button class="close" data-act="close">ZAMKNIJ</button>`;
+    const sc2 = modal.querySelector(".mscroll"); if (sc2) sc2.scrollTop = top;
+
+    modal.querySelectorAll("[data-thr]").forEach(inp => inp.onchange = () => {
+      const vals = [...modal.querySelectorAll("[data-thr]")].map(x => Math.floor(Number(x.value)));
+      const ok = vals.every((v, i) => Number.isFinite(v) && v > 0 && (i === 0 || v > vals[i - 1]));
+      modal.querySelectorAll("[data-thr]").forEach((x, i) => x.classList.toggle("bad", !ok));
+      if (!ok) { toast("Progi muszą rosnąć"); return; }
+      S.settings.rankThresholds = vals; save(); renderAll();
+    });
+    $("#thrReset").onclick = () => { S.settings.rankThresholds = DEFAULT_THRESHOLDS.slice(); save(); renderAll(); renderSettings(); toast("Przywrócono domyślne progi"); };
+
+    $("#bkSave").onclick = async () => {
+      const json = exportData(), d0 = new Date(), name = fileName().replace(".json", `-${d0.getFullYear()}-${String(d0.getMonth() + 1).padStart(2, "0")}-${String(d0.getDate()).padStart(2, "0")}.json`);
+      const file = new File([json], name, { type: "application/json" }), info = $("#bkInfo");
+      // podgląd w claude.ai: zapis przez okno potwierdzenia
+      if (dlNS) {
+        try { await dlNS.save({ filename: name, data: json }); info.textContent = "Zapisano: " + name; }
+        catch (e) { info.textContent = e && e.code === "declined" ? "Anulowano zapis." : "Nie udało się zapisać pliku."; }
+        return;
+      }
+      try { if (navigator.canShare && navigator.canShare({ files: [file] })) { await navigator.share({ files: [file], title: name }); info.textContent = "Zapisano: " + name; return; } }
+      catch (e) { if (e && e.name === "AbortError") return; }
+      try {
+        const url = URL.createObjectURL(file), a = document.createElement("a");
+        a.href = url; a.download = name; document.body.appendChild(a); a.click(); a.remove();
+        setTimeout(() => URL.revokeObjectURL(url), 4000);
+        info.textContent = "Pobrano plik: " + name;
+      } catch (e) {
+        info.textContent = "Ta przeglądarka nie pozwala zapisać pliku. Skopiuj tekst i zachowaj go:";
+        const ta = document.createElement("textarea"); ta.className = "bk-copy"; ta.value = json; info.after(ta);
+      }
+    };
+    $("#bkLoad").onclick = () => $("#bkFile").click();
+    $("#bkFile").onchange = async e => {
+      const f = e.target.files && e.target.files[0]; if (!f) return;
+      const data = parseCard(await f.text());
+      if (!data) { $("#bkInfo").textContent = "Ten plik nie zawiera postaci z karty L5K."; return; }
+      askImport(data, f.name);
+    };
+    const on = (id, fn) => { const el = $(id); if (el) el.onclick = fn; };
+    on("#fsNew", connectNewFile); on("#fsOpen", connectExistingFile); on("#fsResume", resumeFile); on("#fsOff", disconnectFile);
+  }
+  function openSettings(){ settingsOpen = true; openModal(renderSettings); }
+  $("#btnSettings").addEventListener("click", openSettings);
+  overlay.addEventListener("click", e => { if (e.target === overlay) settingsOpen = false; });
+  restoreFileHandle();
+  try { navigator.storage && navigator.storage.persist && navigator.storage.persist(); } catch (e) {}
+
+  function renderAll(){ renderHeader(); renderRings(); renderHCS(); renderHealth(); renderSkills(); renderTattoos(); renderMartial(); renderAdv(); $("#pdBadge").textContent = S.pd; }
+  renderAll();
+  go(PAGES.some(p => p.id === S.page) ? S.page : "kregi");
+
+  // ---- Tryb offline (PWA) ----
+  if ("serviceWorker" in navigator) {
+    window.addEventListener("load", () => { navigator.serviceWorker.register("sw.js").catch(() => {}); });
+  }
+})();
+</script>
+</body>
+</html>
